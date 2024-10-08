@@ -32,59 +32,15 @@
 */
 
 
-#include "src/jazz_model/model.h"
+#include "src/jazz_models/model.h"
 
 
-namespace jazz_model
+namespace jazz_models
 {
 
-using namespace jazz_elements;
 
-/*	-----------------------------------------------
-	 Model : I m p l e m e n t a t i o n
---------------------------------------------------- */
-
-Model::Model(pLogger	 a_logger,
-			 pConfigFile a_config) : Container(a_logger, a_config) {}
-
-
-Model::~Model() { destroy_container(); }
-
-
-/** Return object ID.
-
-	\return A string identifying the object that is especially useful to track uplifts and versions.
-*/
-pChar const Model::id() {
-    static char arr[] = "Model from Jazz-" JAZZ_VERSION;
-    return arr;
-}
-
-
-/** Starts the Model service
-*/
-StatusCode Model::start() {
-
-	return SERVICE_NO_ERROR;
-}
-
-
-/** Shuts down the Persisted Service
-*/
-StatusCode Model::shut_down() {
-
-	return SERVICE_NO_ERROR;
-}
-
-
-#ifdef CATCH_TEST
-
-Model MDL(&LOGGER, &CONFIG);
-
-#endif
-
-} // namespace jazz_model
+} // namespace jazz_models
 
 #if defined CATCH_TEST
-#include "src/jazz_model/tests/test_model.ctest"
+#include "src/jazz_models/tests/test_model.ctest"
 #endif

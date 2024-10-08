@@ -32,7 +32,7 @@
 */
 
 
-#include "src/jazz_model/semspace.h"
+#include "src/include/jazz_bebop.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2
@@ -44,46 +44,18 @@
 #endif
 
 
-#ifndef INCLUDED_JAZZ_MODEL_MODEL
-#define INCLUDED_JAZZ_MODEL_MODEL
+#ifndef INCLUDED_JAZZ_MODELS_MODEL
+#define INCLUDED_JAZZ_MODELS_MODEL
 
 
-/** \brief Models: Creating new snippets
+/** \brief Model: The abstract model.
 
-Concepts evolve by searching new code representations. Models search new code across fields.
 */
 
-namespace jazz_model
+namespace jazz_models
 {
 
-using namespace jazz_elements;
 
+} // namespace jazz_models
 
-class Model : public Container {
-
-	public:
-
-		Model(pLogger	 a_logger,
-			  pConfigFile a_config);
-	   ~Model();
-
-		virtual pChar const id();
-
-		StatusCode start	();
-		StatusCode shut_down();
-};
-typedef Model *pModel;
-
-
-#ifdef CATCH_TEST
-
-// Instancing Model
-// ----------------
-
-extern Model MDL;
-
-#endif
-
-} // namespace jazz_model
-
-#endif // ifndef INCLUDED_JAZZ_MODEL_MODEL
+#endif // ifndef INCLUDED_JAZZ_MODELS_MODEL
