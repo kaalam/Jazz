@@ -79,7 +79,7 @@ StatusCode Core::shut_down() {
 
 #ifdef CATCH_TEST
 
-Core CORE(&LOGGER, &CONFIG, &PAK, &FLS);
+Core CORE(&LOGGER, &CONFIG);
 
 #endif
 

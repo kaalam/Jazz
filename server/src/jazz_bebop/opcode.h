@@ -31,6 +31,7 @@
 	limitations under the License.
 */
 
+
 #include "src/jazz_bebop/concept.h"
 
 #if defined CATCH_TEST

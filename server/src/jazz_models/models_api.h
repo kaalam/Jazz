@@ -32,7 +32,7 @@
 */
 
 
-// #include "src/jazz_models/models.h"
+#include "src/jazz_models/models.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2
@@ -76,11 +76,10 @@ typedef ModelsAPI *pModel;
 // Instancing ModelsAPI
 // --------------------
 
-extern Model MDL;
+extern ModelsAPI MDL;
 
 #endif
 
 } // namespace jazz_models
 
 #endif // ifndef INCLUDED_JAZZ_MODELS_MODELS_API
-

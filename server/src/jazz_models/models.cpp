@@ -47,4 +47,3 @@ namespace jazz_models
 #if defined CATCH_TEST
 #include "src/jazz_models/tests/test_models.ctest"
 #endif
-
