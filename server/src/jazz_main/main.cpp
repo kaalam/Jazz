@@ -42,7 +42,7 @@
 using namespace std;
 using namespace jazz_main;
 using namespace jazz_bebop;
-using namespace jazz_model;
+using namespace jazz_models;
 
 
 /** Display the Jazz logo message automatically appending JAZZ_VERSION.
@@ -192,37 +192,7 @@ int main(int argc, char* argv[]) {
 			exit(EXIT_FAILURE);
 		}
 
-		if (!start_service(&PACK)) {
-			stop_service(&PERSISTED);
-			stop_service(&VOLATILE);
-			stop_service(&CHANNELS);
-
-			exit(EXIT_FAILURE);
-		}
-
-		if (!start_service(&FIELD)) {
-			stop_service(&PACK);
-			stop_service(&PERSISTED);
-			stop_service(&VOLATILE);
-			stop_service(&CHANNELS);
-
-			exit(EXIT_FAILURE);
-		}
-
 		if (!start_service(&CORE)) {
-			stop_service(&FIELD);
-			stop_service(&PACK);
-			stop_service(&PERSISTED);
-			stop_service(&VOLATILE);
-			stop_service(&CHANNELS);
-
-			exit(EXIT_FAILURE);
-		}
-
-		if (!start_service(&SEMSPACE)) {
-			stop_service(&CORE);
-			stop_service(&FIELD);
-			stop_service(&PACK);
 			stop_service(&PERSISTED);
 			stop_service(&VOLATILE);
 			stop_service(&CHANNELS);
@@ -231,10 +201,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		if (!start_service(&MODEL)) {
-			stop_service(&SEMSPACE);
 			stop_service(&CORE);
-			stop_service(&FIELD);
-			stop_service(&PACK);
 			stop_service(&PERSISTED);
 			stop_service(&VOLATILE);
 			stop_service(&CHANNELS);
@@ -244,10 +211,7 @@ int main(int argc, char* argv[]) {
 
 		if (!start_service(&API)) {
 			stop_service(&MODEL);
-			stop_service(&SEMSPACE);
 			stop_service(&CORE);
-			stop_service(&FIELD);
-			stop_service(&PACK);
 			stop_service(&PERSISTED);
 			stop_service(&VOLATILE);
 			stop_service(&CHANNELS);
@@ -262,10 +226,7 @@ int main(int argc, char* argv[]) {
 			stop_service(&HTTP);
 			stop_service(&API);
 			stop_service(&MODEL);
-			stop_service(&SEMSPACE);
 			stop_service(&CORE);
-			stop_service(&FIELD);
-			stop_service(&PACK);
 			stop_service(&PERSISTED);
 			stop_service(&VOLATILE);
 			stop_service(&CHANNELS);
