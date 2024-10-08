@@ -18,10 +18,10 @@ are modified.
     uplifts/
     ├── README.md  // This file
     ├── api/       // <name>.h, <name>.cpp with a class inherited from Api      (in jazz_main/api.h)       or no `api` folder.
-    ├── field/     // <name>.h, <name>.cpp with a class inherited from Field    (in jazz_bebop/field.h)	   or no `field` folder.
-    ├── model/     // <name>.h, <name>.cpp with a class inherited from Model    (in jazz_model/model.h)    or no `model` folder.
-    ├── pack/      // <name>.h, <name>.cpp with a class inherited from Pack     (in jazz_bebop/pack.h)     or no `pack` folder.
-    └── semspace/  // <name>.h, <name>.cpp with a class inherited from SemSpace (in jazz_model/semspace.h) or no `semspace` folder.
+    └── model/     // <name>.h, <name>.cpp with a class inherited from ModelAPI (in jazz_model/model.h)    or no `model` folder.
 
-The "magic" works because `./config.sh` will include the compilation paths and create two `src/uplifted/uplifted_instances.h`,
+1. The "magic" works because `./config.sh` will include the compilation paths and create two `src/uplifted/uplifted_instances.h`,
 `src/uplifted/uplifted_instances.cpp` files with the names of the uplifted classes that will replace their parent classes in the server.
+
+2. The model/* project can have as many files as necessary as long as their imports are explicit. You have to define a service that
+inherits ModelAPI to serve the models, but also, another instance that inherits Models and the models themselves which inherit Model.
