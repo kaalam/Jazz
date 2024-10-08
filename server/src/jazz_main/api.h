@@ -34,7 +34,7 @@
 
 #include <map>
 
-#include "src/include/jazz_model.h"
+#include "src/include/jazz_models.h"
 
 #ifdef CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2
