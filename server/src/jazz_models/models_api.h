@@ -60,7 +60,7 @@ class ModelsAPI : public Container {
 
 	public:
 
-		ModelsAPI(pLogger	 a_logger, pConfigFile a_config);
+		ModelsAPI(pLogger a_logger, pConfigFile a_config);
 	   ~ModelsAPI();
 
 		virtual pChar const id();

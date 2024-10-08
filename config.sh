@@ -158,7 +158,7 @@ get_descendant_name ( )
   done
 }
 
-uplifted_mod_parent='Model'
+uplifted_mod_parent='ModelsAPI'
 uplifted_api_parent='Api'
 
 uplifted_mod_source='../uplifts/model/'
