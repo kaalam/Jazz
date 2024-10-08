@@ -396,7 +396,7 @@ if [ "$uplifted_mod" != "$uplifted_mod_parent" ]; then
   uplifted_incl+="#include \"$(ls $uplifted_mod_source*.h)\"\n"
 else
   if [ "$using_namespace_mod" != "1" ]; then
-    uplifted_incl+="using namespace jazz_model;\n"
+    uplifted_incl+="using namespace jazz_models;\n"
   fi
 fi
 
