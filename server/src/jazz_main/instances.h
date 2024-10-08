@@ -63,7 +63,7 @@ namespace jazz_main
 
 using namespace jazz_elements;
 using namespace jazz_bebop;
-using namespace jazz_model;
+using namespace jazz_models;
 
 /*	-----------------------------
 	  I n s t a n t i a t i n g

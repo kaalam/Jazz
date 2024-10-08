@@ -79,7 +79,7 @@ namespace jazz_main
 
 using namespace jazz_elements;
 using namespace jazz_bebop;
-using namespace jazz_model;
+using namespace jazz_models;
 
 #define SIZE_OF_BASE_ENT_KEY	(sizeof(Locator) - sizeof(pExtraLocator))	///< Used to convert HttpQueryState -> Locator
 
