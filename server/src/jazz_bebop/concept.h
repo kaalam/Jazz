@@ -31,7 +31,8 @@
 	limitations under the License.
 */
 
-#include "src/jazz_bebop/concept.h"
+
+#include "src/jazz_bebop/sem_space.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2
@@ -43,12 +44,13 @@
 #endif
 
 
-#ifndef INCLUDED_JAZZ_BEBOP_OPCODE
-#define INCLUDED_JAZZ_BEBOP_OPCODE
+#ifndef INCLUDED_JAZZ_BEBOP_CONCEPT
+#define INCLUDED_JAZZ_BEBOP_CONCEPT
 
 
-/** \brief In Bop-25, opcodes are onnx-runtime operations.
+/** \brief Concepts: The elements of a semantic space
 
+Concepts are code written in Bop with support for representation and composition.
 */
 
 namespace jazz_bebop
@@ -57,4 +59,4 @@ namespace jazz_bebop
 
 } // namespace jazz_bebop
 
-#endif // ifndef INCLUDED_JAZZ_BEBOP_OPCODE
+#endif // ifndef INCLUDED_JAZZ_BEBOP_CONCEPT

@@ -31,7 +31,7 @@
 	limitations under the License.
 */
 
-#include "src/include/jazz_elements.h"
+#include "src/jazz_bebop/core.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2
@@ -47,18 +47,11 @@
 #define INCLUDED_JAZZ_BEBOP_BOP
 
 
-/** \brief Bop functionality required to implement the classes.
-
-This is mainly functionality shared with the API to access resources in other containers in order to get data for the computations.
-
+/** \brief The Bop compiler
 */
 
 namespace jazz_bebop
 {
-
-//TODO: Refactor syntax parsing elements from Api that get blocks into a function here available for Core.
-//TODO: That function must implement the Actor critic model.
-//TODO: Provide mechanisms to apply to multi-block.
 
 
 } // namespace jazz_bebop

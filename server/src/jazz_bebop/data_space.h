@@ -31,7 +31,8 @@
 	limitations under the License.
 */
 
-#include "src/jazz_bebop/concept.h"
+
+#include "src/jazz_bebop/space.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2
@@ -43,12 +44,14 @@
 #endif
 
 
-#ifndef INCLUDED_JAZZ_BEBOP_OPCODE
-#define INCLUDED_JAZZ_BEBOP_OPCODE
+#ifndef INCLUDED_JAZZ_BEBOP_DATA_SPACE
+#define INCLUDED_JAZZ_BEBOP_DATA_SPACE
 
 
-/** \brief In Bop-25, opcodes are onnx-runtime operations.
+/** \brief The DataSpace and its utilities.
 
+This is an essential part of Bop to abstract data storage supporting dataframes, possibly sharded
+and lazy-loaded. It also provides indexing which can select rows, keys of find nearest neighbors.
 */
 
 namespace jazz_bebop
@@ -57,4 +60,4 @@ namespace jazz_bebop
 
 } // namespace jazz_bebop
 
-#endif // ifndef INCLUDED_JAZZ_BEBOP_OPCODE
+#endif // ifndef INCLUDED_JAZZ_BEBOP_DATA_SPACE

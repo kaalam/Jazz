@@ -31,7 +31,8 @@
 	limitations under the License.
 */
 
-#include "src/jazz_bebop/concept.h"
+
+#include "src/jazz_bebop/bop.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2
@@ -43,12 +44,11 @@
 #endif
 
 
-#ifndef INCLUDED_JAZZ_BEBOP_OPCODE
-#define INCLUDED_JAZZ_BEBOP_OPCODE
+#ifndef INCLUDED_JAZZ_BEBOP_BOP_API
+#define INCLUDED_JAZZ_BEBOP_BOP_API
 
 
-/** \brief In Bop-25, opcodes are onnx-runtime operations.
-
+/** \brief The Bop API.
 */
 
 namespace jazz_bebop
@@ -57,4 +57,4 @@ namespace jazz_bebop
 
 } // namespace jazz_bebop
 
-#endif // ifndef INCLUDED_JAZZ_BEBOP_OPCODE
+#endif // ifndef INCLUDED_JAZZ_BEBOP_BOP_API

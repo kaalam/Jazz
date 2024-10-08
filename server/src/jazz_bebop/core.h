@@ -31,7 +31,7 @@
 	limitations under the License.
 */
 
-#include "src/jazz_bebop/field.h"
+#include "src/jazz_bebop/opcode.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2
@@ -47,9 +47,9 @@
 #define INCLUDED_JAZZ_BEBOP_CORE
 
 
-/** \brief Core: The execution unit running Snippet objects.
+/** \brief Core: The execution unit is now a wrapper around onnx-runtime.
 
-A core is not a service, it allocates its state in the Volatile container.
+A core is not a service, it is stored in a Bop API.
 */
 
 namespace jazz_bebop
@@ -62,10 +62,7 @@ class Core : public Container {
 
 	public:
 
-		Core(pLogger	 a_logger,
-			 pConfigFile a_config,
-			 pPack		 a_pack,
-			 pField		 a_field);
+		Core(pLogger	 a_logger, pConfigFile a_config);
 	   ~Core();
 
 		virtual pChar const id();

@@ -47,12 +47,7 @@ using namespace jazz_elements;
 	 Core : I m p l e m e n t a t i o n
 --------------------------------------------------- */
 
-Core::Core(pLogger	   a_logger,
-		   pConfigFile a_config,
-		   pPack	   a_pack,
-		   pField	   a_field) : Container(a_logger, a_config) {}
-
-
+Core::Core(pLogger	   a_logger, pConfigFile a_config) : Container(a_logger, a_config) {}
 Core::~Core() { destroy_container(); }
 
 
