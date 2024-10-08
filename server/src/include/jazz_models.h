@@ -35,18 +35,18 @@
 #include "src/include/jazz_bebop.h"
 
 
-#ifndef INCLUDED_JAZZ_MODEL
-#define INCLUDED_JAZZ_MODEL
+#ifndef INCLUDED_JAZZ_MODELS
+#define INCLUDED_JAZZ_MODELS
 
 
-/** \brief Includes everything in namespace jazz_model.
+/** \brief Includes everything Jazz models.
 
-This is everything from objects to concepts, from code execution to code creation.
+This is the parent abstract model, the models manager and the API. Actual models are uplifted.
 */
 
-#include "src/jazz_model/concept.h"
-#include "src/jazz_model/semspace.h"
-#include "src/jazz_model/model.h"
+#include "src/jazz_models/model.h"
+#include "src/jazz_models/models.h"
+#include "src/jazz_models/models_api.h"
 
 
-#endif // ifndef INCLUDED_JAZZ_MODEL
+#endif // ifndef INCLUDED_JAZZ_MODELS

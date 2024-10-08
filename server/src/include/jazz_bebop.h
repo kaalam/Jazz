@@ -41,15 +41,17 @@
 
 /** \brief Includes everything in namespace jazz_bebop.
 
-This is everything to run bebop code: Cores, Fields, Primitives, Snippets, Kernels, etc.
+This is everything to run bebop code: Spaces, DataSpaces, SemSpaces, Concepts, Opcodes, Core, Bop and the Bop API.
 */
 
-#include "src/jazz_bebop/bop.h"
+#include "src/jazz_bebop/space.h"
+#include "src/jazz_bebop/data_space.h"
+#include "src/jazz_bebop/sem_space.h"
+#include "src/jazz_bebop/concept.h"
 #include "src/jazz_bebop/opcode.h"
-#include "src/jazz_bebop/pack.h"
-#include "src/jazz_bebop/snippet.h"
-#include "src/jazz_bebop/field.h"
 #include "src/jazz_bebop/core.h"
+#include "src/jazz_bebop/bop.h"
+#include "src/jazz_bebop/bop_api.h"
 
 
 #endif // ifndef INCLUDED_JAZZ_BEBOP
