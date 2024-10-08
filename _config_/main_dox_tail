@@ -2,7 +2,7 @@ Programming Documentation of the Jazz Server
 
 \section jazz_mods Jazz Modules Diagram
 
-This diagram shows how the different Jazz modules fit. \n
+This diagram shows how the different Jazz modules fit.\n
 
 ![Jazz modules](diagrams/jazz_modules.png)
 
@@ -10,11 +10,8 @@ The maturity level of the different modules is:\n
 
 Maturity | Description
 -------- | -----------
-nothing  | Code is complete and tested.
-[TEST]   | Code is complete, but testing is not complete.
-[PROTO]  | Code under active development, possibly working, but not release quality.
-[DRAFT]  | Code under active development, PoC in Python and API closed, but no working implementation in Jazz.
-[FUTURE] | Code not under active development. Working on PoC.
+nothing  | Code is complete, tested and already was in previous versions.
+[v.m.r]   | Code under active development and will be released when the version v.m.r is complete.
 \n
 
 There are three C++ namespaces, intended for general c++ Jazz programming, possibly using external Jazz servers, but not necessarily as
@@ -22,7 +19,7 @@ implemented as an http server:
 
 1. jazz_elements (All the pieces: Blocks, Kinds, Tuples, storage, communication, services, etc.)\n
 2. jazz_bebop (Everything to run bebop code: Bop (utils), OpCode, Pack, Snippet, Field, Core)\n
-3. jazz_model (From objects to concepts, from code execution to code creation)\n
+3. jazz_models (From objects to concepts, from code execution to code creation)\n
 \n
 
 Additionally, there is a namespace for the server:
