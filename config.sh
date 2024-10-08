@@ -158,21 +158,12 @@ get_descendant_name ( )
   done
 }
 
-uplifted_pak_parent='Pack'
-uplifted_fie_parent='Field'
-uplifted_spa_parent='SemSpace'
 uplifted_mod_parent='Model'
 uplifted_api_parent='Api'
 
-uplifted_pak_source='../uplifts/pack/'
-uplifted_fie_source='../uplifts/field/'
-uplifted_spa_source='../uplifts/semspace/'
 uplifted_mod_source='../uplifts/model/'
 uplifted_api_source='../uplifts/api/'
 
-uplifted_pak=$(get_descendant_name $uplifted_pak_parent $uplifted_pak_source)
-uplifted_fie=$(get_descendant_name $uplifted_fie_parent $uplifted_fie_source)
-uplifted_spa=$(get_descendant_name $uplifted_spa_parent $uplifted_spa_source)
 uplifted_mod=$(get_descendant_name $uplifted_mod_parent $uplifted_mod_source)
 uplifted_api=$(get_descendant_name $uplifted_api_parent $uplifted_api_source)
 
@@ -181,24 +172,6 @@ vpath=$(echo src/*/ "$testp")
 jzpat=$(echo "$vpath" | sed 's/\ /\n/g' | grep jazz | tr '\n' ' ')
 
 cpps=$(find src/ | grep '.*jazz\(01\)\?_.*cpp$' | tr '\n' ' ')
-
-if [ "$uplifted_pak" != "$uplifted_pak_parent" ]; then
-	vpath+="$uplifted_pak_source "
-	jzpat+="$uplifted_pak_source "
-	cpps+="$(ls $uplifted_pak_source*.cpp) "
-fi
-
-if [ "$uplifted_fie" != "$uplifted_fie_parent" ]; then
-	vpath+="$uplifted_fie_source "
-	jzpat+="$uplifted_fie_source "
-	cpps+="$(ls $uplifted_fie_source*.cpp) "
-fi
-
-if [ "$uplifted_spa" != "$uplifted_spa_parent" ]; then
-	vpath+="$uplifted_spa_source "
-	jzpat+="$uplifted_spa_source "
-	cpps+="$(ls $uplifted_spa_source*.cpp) "
-fi
 
 if [ "$uplifted_mod" != "$uplifted_mod_parent" ]; then
 	vpath+="$uplifted_mod_source "
@@ -288,9 +261,6 @@ if [[ $mode =~ 'DEBUG' ]]; then
   echo "cpps          = $cpps"
   echo "objs          = $objs"
   echo "jazz_depends  = $jazz_depends"
-  echo "uplifted_pak  = $uplifted_pak"
-  echo "uplifted_fie  = $uplifted_fie"
-  echo "uplifted_spa  = $uplifted_spa"
   echo "uplifted_mod  = $uplifted_mod"
   echo "uplifted_api  = $uplifted_api"
 
@@ -422,28 +392,6 @@ uplifted_incl=""
 using_namespace_bop="0"
 using_namespace_mod="0"
 
-if [ "$uplifted_pak" != "$uplifted_pak_parent" ]; then
-  uplifted_incl+="#include \"$(ls $uplifted_pak_source*.h)\"\n"
-else
-  uplifted_incl+="using namespace jazz_bebop;\n"
-  using_namespace_bop="1"
-fi
-
-if [ "$uplifted_fie" != "$uplifted_fie_parent" ]; then
-  uplifted_incl+="#include \"$(ls $uplifted_fie_source*.h)\"\n"
-else
-  if [ "$using_namespace_bop" != "1" ]; then
-    uplifted_incl+="using namespace jazz_bebop;\n"
-  fi
-fi
-
-if [ "$uplifted_spa" != "$uplifted_spa_parent" ]; then
-  uplifted_incl+="#include \"$(ls $uplifted_spa_source*.h)\"\n"
-else
-  uplifted_incl+="using namespace jazz_model;\n"
-  using_namespace_mod="1"
-fi
-
 if [ "$uplifted_mod" != "$uplifted_mod_parent" ]; then
   uplifted_incl+="#include \"$(ls $uplifted_mod_source*.h)\"\n"
 else
@@ -467,9 +415,6 @@ printf "Writing: server/src/uplifted/uplifted_instances.h ... "
 printf "// This file is auto generated, do NOT edit, run ./config.sh instead
 
 $uplifted_incl
-extern $uplifted_pak PACK;
-extern $uplifted_fie FIELD;
-extern $uplifted_spa SEMSPACE;
 extern $uplifted_mod MODEL;
 extern $uplifted_api API;\n" > server/src/uplifted/uplifted_instances.h
 
@@ -480,9 +425,6 @@ printf "Writing: server/src/uplifted/uplifted_instances.cpp ... "
 
 printf "// This file is auto generated, do NOT edit, run ./config.sh instead
 
-$uplifted_pak PACK(&LOGGER, &CONFIG);
-$uplifted_fie FIELD(&LOGGER, &CONFIG, &PACK);
-$uplifted_spa SEMSPACE(&LOGGER, &CONFIG);
 $uplifted_mod MODEL(&LOGGER, &CONFIG);
 $uplifted_api API(&LOGGER, &CONFIG, &CHANNELS, &VOLATILE, &PERSISTED, &CORE, &MODEL);\n" > server/src/uplifted/uplifted_instances.cpp
 
