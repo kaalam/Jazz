@@ -21,12 +21,16 @@ mode='RUN'    # Set mode='DEBUG' for echoing all variables before confirmation.
 # Section 1. Gathering all necessary information. 1. Fail if necessary. 2. Do nothing without confirmation
 # ----------
 
+# 1.1 Help on usage
+
 if [[ $1 = '--help' ]]; then
   cat _config_/help_on_config.txt
   exit 0
 fi
 
 printf "(usage: ./config.sh --help)\n\nGathering information ...\n\n"
+
+# 1.2 Get Jazz environment variables
 
 jazz_pwd=$(pwd)
 
@@ -37,6 +41,8 @@ jazz_distro2=$(cat /etc/*-release | grep '^DISTRIB_RELEASE=' | sed 's/^DISTRIB_R
 
 jazz_years=$(date +%Y)
 if [ "$jazz_years" != '2017' ]; then jazz_years="2017-$jazz_years"; fi
+
+# 1.3 Link to the MicroHTTPD library
 
 if [ -e '_config_/mhd_include_path' ]; then mhd_inclpath=$(cat _config_/mhd_include_path); else mhd_inclpath='/usr/include'; fi
 
@@ -57,6 +63,8 @@ if [ ! -e "$mhd_libpath/libmicrohttpd.so" ]; then
   exit 1
 fi
 
+# 1.4 Link to the CURL library
+
 if [ -e '_config_/curl_include_path' ]; then curl_inclpath=$(cat _config_/curl_include_path); else curl_inclpath='/usr/include/x86_64-linux-gnu'; fi
 
 if [ ! -e "$curl_inclpath/curl/curl.h" ]; then
@@ -75,6 +83,8 @@ if [ ! -e "$curl_libpath/libcurl.so" ]; then
   cat _config_/help_curl_not_found.txt
   exit 1
 fi
+
+# 1.5 Link to the ZeroMQ library
 
 if [ -e '_config_/zmq_include_path' ]; then zmq_inclpath=$(cat _config_/zmq_include_path); else zmq_inclpath='/usr/local/include'; fi
 
@@ -95,6 +105,28 @@ if [ ! -e "$zmq_libpath/libzmq.so" ]; then
   exit 1
 fi
 
+# 1.6 Link to onnxruntime library
+
+if [ -e '_config_/onnx_include_path' ]; then onnx_inclpath=$(cat _config_/onnx_include_path); else onnx_inclpath='/usr/local/include'; fi
+
+if [ ! -e "$onnx_inclpath/onnxruntime_c_api.h" ]; then
+  echo "** File $onnx_inclpath/onnxruntime_c_api.h was not found. **"
+  cat _config_/help_onnx_not_found.txt
+  exit
+fi
+
+if [ -e '_config_/onnx_library_path' ]; then onnx_libpath=$(cat _config_/onnx_library_path)
+else
+  if [ -e '/usr/local/lib/libonnxruntime.so' ]; then onnx_libpath='/usr/local/lib'; else onnx_libpath='/usr/lib/x86_64-linux-gnu'; fi
+fi
+
+if [ ! -e "$onnx_libpath/libonnxruntime.so" ]; then
+  echo "** File $onnx_libpath/libonnxruntime.so was not found. **"
+  cat _config_/help_onnx_not_found.txt
+  exit 1
+fi
+
+# 1.7 Get all the Uplifted modules
 
 cd server || return 1
 
@@ -180,6 +212,8 @@ if [ "$uplifted_api" != "$uplifted_api_parent" ]; then
 	cpps+="$(ls $uplifted_api_source*.cpp) "
 fi
 
+# 1.8 Get all the dependencies
+
 objs=$(echo "$cpps" | sed 's/\ /\n/g' | sed 's/.*\/\(.*cpp\)$/\1/' | sed 's/cpp/o/' | tr '\n' ' ')
 
 
@@ -232,7 +266,8 @@ jazz_depends=$(depends)
 cd "$jazz_pwd" || return 1
 
 
-# End of section 1: Dump all variables if debugging
+# 1.9 Dump all variables if debugging
+
 if [[ $mode =~ 'DEBUG' ]]; then
   echo "jazz_pwd      = $jazz_pwd"
   echo "jazz_version  = $jazz_version"
@@ -246,6 +281,8 @@ if [[ $mode =~ 'DEBUG' ]]; then
   echo "curl_libpath  = $curl_libpath"
   echo "zmq_inclpath  = $zmq_inclpath"
   echo "zmq_libpath   = $zmq_libpath"
+  echo "onnx_inclpath = $onnx_inclpath"
+  echo "onnx_libpath  = $onnx_libpath"
   echo "vpath         = $vpath"
   echo "jzpat         = $jzpat"
   echo "cpps          = $cpps"
@@ -298,13 +335,14 @@ printf "Writing: server/Makefile ... "
 
 echo "$(cat _config_/makefile_head)
 
-CXXFLAGS     := -std=c++17 -I. -I$mhd_inclpath -I$curl_inclpath -I$zmq_inclpath
+CXXFLAGS     := -std=c++17 -I. -I$mhd_inclpath -I$curl_inclpath -I$zmq_inclpath -I$onnx_inclpath
 LINUX        := ${jazz_distro1}_${jazz_distro2}
 HOME         := $jazz_pwd
 VERSION      := $jazz_version
 mhd_libpath  := $mhd_libpath
 curl_libpath := $curl_libpath
 zmq_libpath  := $zmq_libpath
+onnx_libpath := $onnx_libpath
 
 VPATH = $vpath
 

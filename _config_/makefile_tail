@@ -24,15 +24,15 @@ compile_mode_test:
 
 djazz: compile_mode_debug $(objects) mdb.o midl.o
 	@echo "Making DEBUG Jazz ..."
-	g++ -o djazz $(objects) mdb.o midl.o -I$(mhd_libpath) -L$(mhd_libpath) -I$(curl_libpath) -L$(curl_libpath) -I$(zmq_libpath) -L$(zmq_libpath) -lmicrohttpd -lpthread -lcurl -lzmq
+	g++ -o djazz $(objects) mdb.o midl.o -I$(mhd_libpath) -L$(mhd_libpath) -I$(curl_libpath) -L$(curl_libpath) -I$(zmq_libpath) -L$(zmq_libpath) -I$(onnx_inclpath) -L$(onnx_inclpath) -lmicrohttpd -lpthread -lcurl -lzmq -lonnxruntime
 
 jazz: compile_mode_release $(objects) mdb.o midl.o
 	@echo "Making RELEASE Jazz ..."
-	g++ -o  jazz $(objects) mdb.o midl.o -I$(mhd_libpath) -L$(mhd_libpath) -I$(curl_libpath) -L$(curl_libpath) -I$(zmq_libpath) -L$(zmq_libpath) -lmicrohttpd -lpthread -lcurl -lzmq
+	g++ -o  jazz $(objects) mdb.o midl.o -I$(mhd_libpath) -L$(mhd_libpath) -I$(curl_libpath) -L$(curl_libpath) -I$(zmq_libpath) -L$(zmq_libpath) -I$(onnx_inclpath) -L$(onnx_inclpath) -lmicrohttpd -lpthread -lcurl -lzmq -lonnxruntime
 
 tjazz: compile_mode_test $(objects) mdb.o midl.o
 	@echo "Making DEBUG&TEST Jazz ..."
-	g++ -o tjazz $(objects) mdb.o midl.o -I$(mhd_libpath) -L$(mhd_libpath) -I$(curl_libpath) -L$(curl_libpath) -I$(zmq_libpath) -L$(zmq_libpath) -lmicrohttpd -lpthread -lcurl -lzmq
+	g++ -o tjazz $(objects) mdb.o midl.o -I$(mhd_libpath) -L$(mhd_libpath) -I$(curl_libpath) -L$(curl_libpath) -I$(zmq_libpath) -L$(zmq_libpath) -I$(onnx_inclpath) -L$(onnx_inclpath) -lmicrohttpd -lpthread -lcurl -lzmq -lonnxruntime
 
 # Targets (3): Phony targets
 # ------------

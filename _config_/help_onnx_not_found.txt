@@ -1,0 +1,37 @@
+
+The Jazz server requires onnxruntime!
+
+1. If you haven't yet installed onnxruntime:
+
+  You have to compile it from source.
+
+  This has some prerequisites that can be installed (on Debian-like systems) with:
+
+    sudo apt-get install -y build-essential cmake git python3 python3-pip
+    python3 -m pip install cmake
+
+  First download it:
+
+    git clone https://github.com/microsoft/onnxruntime.git
+	cd onnxruntime
+
+  Compile it:
+
+	./build.sh --config Release --build_shared_lib --parallel
+
+  Install it
+
+    sudo cp include/onnxruntime/core/session/onnxruntime_c_api.h /usr/local/include/
+    sudo cp build/Linux/RelWithDebInfo/libonnxruntime.so.1.20.0 /usr/local/lib/
+    sudo ln -s /usr/local/lib/libonnxruntime.so.1.20.0 /usr/local/lib/libonnxruntime.so
+    sudo ln -s /usr/local/lib/libonnxruntime.so.1.20.0 /usr/local/lib/libonnxruntime.so.1
+    sudo ldconfig
+
+2. If you know where to find the library (libonnxruntime.so) and the header (onnxruntime_c_api.h):
+
+  You can set the paths (ONLY the paths, no extra characters) in _config_ as follows:
+
+    echo '/home/me/my_lib/include' > _config_/onnx_include_path
+    echo '/home/me/my_lib/libs'    > _config_/onnx_library_path
+
+  and run ./config.sh again. It will use these paths instead of trying to guess.
