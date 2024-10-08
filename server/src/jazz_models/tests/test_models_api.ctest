@@ -38,9 +38,9 @@ using namespace jazz_models;
 // Tests
 // -----
 
-SCENARIO("Testing model") {
+SCENARIO("Testing models_api") {
 
-//TODO: Write tests for model.
+//TODO: Write tests for models_api.
 
 	GIVEN("Something") {
 		WHEN("someone looks at it") {
