@@ -193,7 +193,7 @@ class Tuple : public Block {
 			NOTE: Use the pointer as read-only (more than one cell may point to the same value) and never try to free it.
 		*/
 		inline char *item_name(int idx)	{
-			if (idx < 0 | idx >= size)
+			if (idx < 0 || idx >= size)
 				return nullptr;
 
 			return reinterpret_cast<char *>(&p_string_buffer()->buffer[tensor.cell_item[idx].name]);
@@ -235,14 +235,14 @@ class Tuple : public Block {
 			\return True if the Tuple can be linked to a Kind (regardless of BLOCK_ATTRIB_KIND)
 		*/
 		inline bool is_a(pKind kind) {
-			if (kind->cell_type != CELL_TYPE_KIND_ITEM | kind->size != size)
+			if (kind->cell_type != CELL_TYPE_KIND_ITEM || kind->size != size)
 				return false;
 
 			std::map<std::string, int> dimension;
 
 			for (int i = 0; i < size; i++) {
 				if (  kind->tensor.cell_item[i].cell_type != tensor.cell_item[i].cell_type
-					| kind->tensor.cell_item[i].rank	  != tensor.cell_item[i].rank)
+					|| kind->tensor.cell_item[i].rank	  != tensor.cell_item[i].rank)
 					return false;
 
 				if (strcmp(kind->item_name(i), item_name(i)))

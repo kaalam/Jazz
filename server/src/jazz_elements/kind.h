@@ -93,7 +93,7 @@ class Kind : public Block {
 			NOTE: Use the pointer as read-only (more than one cell may point to the same value) and never try to free it.
 		*/
 		inline char *item_name(int idx)	{
-			if (idx < 0 | idx >= size)
+			if (idx < 0 || idx >= size)
 				return nullptr;
 
 			return reinterpret_cast<char *>(&p_string_buffer()->buffer[tensor.cell_item[idx].name]);
@@ -186,12 +186,12 @@ class Kind : public Block {
 		together with their names.
 		*/
 		inline bool add_item(int		   idx,
-			   				 char const   *p_name,
+							 char const   *p_name,
 							 int		  *p_dim,
 							 int		   cell_type,
 							 AttributeMap *p_dims) {
 
-			if (idx < 0 | idx >= size)
+			if (idx < 0 || idx >= size)
 				return false;
 
 			ItemHeader *p_it_hea = &tensor.cell_item[idx];
