@@ -252,11 +252,8 @@ Code execution
 --------------
 
 Code execution covers the methods exec (both for functions and mutators) and modify (a special logic used in channel). Code execution
-both runs at "lower level" (opcodes and snippets) or at higher level (concept, semspace, model). Everything goes through exec() both
-functions and mutators. See the doc in the namespace jazz_bebop for details.
-
-Calling OpCodes and sippets from a container always wraps around the arguments. This means, even is the opcode is a mutator it does not
-modify the original tensor but does a copy-on-write, modifies the copy and returns the copy.
+both runs at "lower level" (Core) to run a compiled pipe or at higher level (ModelsAPI). Everything goes through exec() both
+functions and mutators.
 
 new_block()
 -----------

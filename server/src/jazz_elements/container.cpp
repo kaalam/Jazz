@@ -1956,14 +1956,13 @@ StatusCode Container::copy(pChar p_where, pChar p_what) {
 }
 
 
-/** The function call interface for **exec**: Execute an opcode in a formal field.
+/** The function call interface for **exec**: Execute a function or a model.
 
 	\param p_txn	A pointer to a Transaction passed by reference. If successful, the Container will return a pointer to a
 					Transaction inside the Container.
 	\param function	Some description of a service. In general base/entity/key. In Channels the key must be empty and the entity is
 					the pipeline. In Bebop, the key is the opcode and the entity, the field, In Agents, the entity is a context.
-	\param p_args	A Tuple passed as argument to the call that is not modified. This may be a pure function in Bebop or have context
-					in Agency.
+	\param p_args	A Tuple passed as argument to the call that is not modified.
 
 	\return	SERVICE_NO_ERROR on success (and a valid p_txn), or some negative value (error).
 
