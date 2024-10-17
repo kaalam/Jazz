@@ -113,8 +113,8 @@ class Tuple : public Block {
 									int			  num_bytes,
 									AttributeMap *att = nullptr) {
 
-			if (num_items < 1 || num_items >= MAX_ITEMS_IN_KIND)
-				return false;
+			if (num_items < 1 || num_items > MAX_ITEMS_IN_KIND)
+				return SERVICE_ERROR_WRONG_ARGUMENTS;
 
 			int rq_sz = sizeof(BlockHeader) + sizeof(StringBuffer) + num_items*sizeof(ItemHeader) + 2*num_items;
 

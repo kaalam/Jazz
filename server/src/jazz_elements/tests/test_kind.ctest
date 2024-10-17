@@ -106,6 +106,10 @@ SCENARIO("Testing kind") {
 		REQUIRE(p_kind5->add_item(0, nam_buffer, video_rgb.dim, CELL_TYPE_BYTE,	  &dims));
 		REQUIRE(p_kind5->add_item(1, nam_buffer, one_cell.dim,	CELL_TYPE_STRING, &dims));
 
+		REQUIRE(p_kind6->new_kind(0, 4096, &attr) == false);
+		REQUIRE(p_kind6->new_kind(MAX_ITEMS_IN_KIND + 1, 4096, &attr) == false);
+		REQUIRE(p_kind6->new_kind(MAX_ITEMS_IN_KIND, 0, &attr) == false);
+
 		REQUIRE(p_kind6->new_kind(3, 4096, &attr));
 
 		REQUIRE( p_kind6->add_item( 0, nam_buffer, video_rgb.dim, CELL_TYPE_BYTE,	 &dims));

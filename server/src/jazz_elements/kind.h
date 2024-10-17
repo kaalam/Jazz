@@ -143,7 +143,7 @@ class Kind : public Block {
 							 int		   num_bytes,
 			   				 AttributeMap *att = nullptr) {
 
-			if (num_items < 1 || num_items >= MAX_ITEMS_IN_KIND)
+			if (num_items < 1 || num_items > MAX_ITEMS_IN_KIND)
 				return false;
 
 			int rq_sz = sizeof(BlockHeader) + sizeof(StringBuffer) + num_items*sizeof(ItemHeader) + 2*num_items;

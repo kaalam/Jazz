@@ -34,7 +34,6 @@
 
 using namespace jazz_elements;
 
-
 // Tests
 // -----
 
@@ -555,6 +554,10 @@ SCENARIO("Testing tuple") {
 
 	blocks[0] = p_bl1;
 	blocks[1] = nullptr;
+
+	REQUIRE(p_tup5->new_tuple(0, nullptr, tup_pic, 0, nullptr) == SERVICE_ERROR_WRONG_ARGUMENTS);
+	REQUIRE(p_tup5->new_tuple(MAX_ITEMS_IN_KIND + 1, blocks, tup_pic, 8192, &attr_tuple) == SERVICE_ERROR_WRONG_ARGUMENTS);
+	REQUIRE(p_tup5->new_tuple(MAX_ITEMS_IN_KIND, blocks, tup_pic, 0, &attr_tuple) == SERVICE_ERROR_NO_MEM);
 
 	REQUIRE(p_tup5->new_tuple(1, blocks, tup_fix, 8, &attr_tuple) == SERVICE_ERROR_NO_MEM);
 
