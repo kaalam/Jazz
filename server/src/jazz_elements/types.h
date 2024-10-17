@@ -69,11 +69,11 @@ namespace jazz_elements
 #define NAME_LENGTH				NAME_SIZE - 1	///< Maximum length of a Name.name
 #define ONE_MB					(1024*1024)		///< Is used in log_printf() of error/warning messages
 
-/** Number of elements preallocated in thread-specific buffers. Jazz is thread safe in a caller transparent way. The Block level API
-does not normally modify blocks. The few exceptions have a block-specific lock in the Transaction. Services also have a service-specific
-lock. The few services that require full thread awareness (Bebop and API) will allocate a number of Core or APIexecutor objects equal to
-JAZZ_MAX_NUM_THREADS inside the service. This number can be modified down (but not up) via the configuration keys: MHD_THREAD_POOL_SIZE
-and BEBOP_NUM_CORES. As expected, MHD_THREAD_POOL_SIZE also defines the thread pool size allocated in libmicrohttpd.
+/** Number of elements preallocated in thread-specific buffers. This number can be modified down (but not up) via the configuration keys:
+MHD_THREAD_POOL_SIZE and BEBOP_NUM_CORES. As expected, MHD_THREAD_POOL_SIZE also defines the thread pool size allocated in libmicrohttpd.
+
+There is a specific document on threads called "On the Jazz Actor model (multithreading reference)" in the documentation
+at <host>/develop/rfc2/jazz_actor_model.html
 */
 #define JAZZ_MAX_NUM_THREADS	64
 

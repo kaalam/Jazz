@@ -838,7 +838,7 @@ StatusCode Channels::copy(pChar p_where, pChar p_what) {
 /** The function call interface for **modify**: In jazz_elements, this is only implemented in Channels.
 
 	\param function	Some description of a service. In general base/entity/key. In Channels the key must be empty and the entity is
-					the pipeline. In Bebop, the key is the opcode and the entity, the field, In Agents, the entity is a context.
+					the pipeline.
 	\param p_args	In Channels: A Tuple with two items, "input" with the data passed to the service and "result" with the data returned.
 					The result will be overridden in-place without any allocation.
 
