@@ -199,14 +199,14 @@ SCENARIO("Testing tuple") {
 	attr_kind[BLOCK_ATTRIB_BLOCKTYPE] = (pChar) "kind";
 	attr_kind[BLOCK_ATTRIB_SOURCE]	  = (pChar) "sys.kinds.ThisKind";
 
-	REQUIRE(p_kind1->new_kind(1, 4096, &attr_kind));
+	REQUIRE(p_kind1->new_kind(1, 4096, &attr_kind) == SERVICE_NO_ERROR);
 	REQUIRE(p_kind1->add_item(0, "buffer", image_fixed.dim, CELL_TYPE_BYTE, nullptr));
 
-	REQUIRE(p_kind2->new_kind(2, 4096, &attr_kind));
+	REQUIRE(p_kind2->new_kind(2, 4096, &attr_kind) == SERVICE_NO_ERROR);
 	REQUIRE(p_kind2->add_item(0, "buffer", image_var.dim, CELL_TYPE_BYTE,	&dims));
 	REQUIRE(p_kind2->add_item(1, "title",  title.dim,	  CELL_TYPE_STRING, &dims));
 
-	REQUIRE(p_kind3->new_kind(3, 4096, &attr_kind));
+	REQUIRE(p_kind3->new_kind(3, 4096, &attr_kind) == SERVICE_NO_ERROR);
 	REQUIRE(p_kind3->add_item(0, "buffer", video_var.dim, CELL_TYPE_BYTE,	 &dims));
 	REQUIRE(p_kind3->add_item(1, "audio",  audio_var.dim, CELL_TYPE_INTEGER, &dims));
 	REQUIRE(p_kind3->add_item(2, "title",  title.dim,	  CELL_TYPE_STRING,  &dims));

@@ -895,7 +895,7 @@ StatusCode Container::new_block(pTransaction	   &p_txn,
 #endif
 
 	if (p_block == nullptr) {
-		if (!reinterpret_cast<pKind>(p_txn->p_block)->new_kind(num_items, hea.total_bytes, att)) {
+		if (reinterpret_cast<pKind>(p_txn->p_block)->new_kind(num_items, hea.total_bytes, att) != SERVICE_NO_ERROR) {
 			destroy_transaction(p_txn);
 
 			return SERVICE_ERROR_BAD_NEW_KIND;

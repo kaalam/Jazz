@@ -137,14 +137,14 @@ class Kind : public Block {
 			\param num_bytes The size in bytes allocated. Should be enough for all names, dimensions and attributes + ItemHeaders.
 			\param att		 The attributes for the Kind. Set "as is", without adding BLOCK_ATTRIB_BLOCKTYPE or anything.
 
-			\return			 False on error (insufficient alloc size for a very conservative minimum).
+			\return			 0, SERVICE_ERROR_WRONG_ARGUMENTS (range of num_items) or SERVICE_ERROR_NO_MEM (insufficient alloc size).
 		*/
-		inline bool new_kind(int		   num_items,
-							 int		   num_bytes,
-			   				 AttributeMap *att = nullptr) {
+		inline int new_kind(int			  num_items,
+							int			  num_bytes,
+			   				AttributeMap *att = nullptr) {
 
 			if (num_items < 1 || num_items > MAX_ITEMS_IN_KIND)
-				return false;
+				return SERVICE_ERROR_WRONG_ARGUMENTS;
 
 			int rq_sz = sizeof(BlockHeader) + sizeof(StringBuffer) + num_items*sizeof(ItemHeader) + 2*num_items;
 
@@ -152,7 +152,7 @@ class Kind : public Block {
 				rq_sz += 2*att->size();
 
 			if (num_bytes < rq_sz)
-				return false;
+				return SERVICE_ERROR_NO_MEM;
 
 			memset(&cell_type, 0, num_bytes);
 
@@ -164,7 +164,7 @@ class Kind : public Block {
 
 			set_attributes(att);
 
-			return true;
+			return SERVICE_NO_ERROR;
 		}
 
 		/** Initializes a Kind object (step 2): Adds each of the items.

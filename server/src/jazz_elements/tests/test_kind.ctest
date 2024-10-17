@@ -67,11 +67,11 @@ SCENARIO("Testing kind") {
 		attr[BLOCK_ATTRIB_BLOCKTYPE] = (pChar) &nam_bl_type;
 		attr[BLOCK_ATTRIB_SOURCE]	 = (pChar) &nam_at_type;
 
-		REQUIRE(p_kind1->new_kind(1, 4096, &attr));
+		REQUIRE(p_kind1->new_kind(1, 4096, &attr) == SERVICE_NO_ERROR);
 
 		REQUIRE(p_kind1->add_item(0, nam_buffer, image_rgb.dim, CELL_TYPE_BYTE, &dims));
 
-		REQUIRE(p_kind2->new_kind(2, 4096, &attr));
+		REQUIRE(p_kind2->new_kind(2, 4096, &attr) == SERVICE_NO_ERROR);
 
 		image_rgb.dim[0] = -640;
 		dims[-640] = (const char *) &nam_width;
@@ -81,7 +81,7 @@ SCENARIO("Testing kind") {
 		REQUIRE(p_kind2->add_item(0, nam_buffer, image_rgb.dim, CELL_TYPE_BYTE,	  &dims));
 		REQUIRE(p_kind2->add_item(1, nam_title_, one_cell.dim,  CELL_TYPE_STRING, &dims));
 
-		REQUIRE(p_kind3->new_kind(3, 4096, &attr));
+		REQUIRE(p_kind3->new_kind(3, 4096, &attr) == SERVICE_NO_ERROR);
 
 		video_rgb.dim[0] = -999;
 		video_rgb.dim[1] = -640;
@@ -93,24 +93,24 @@ SCENARIO("Testing kind") {
 		REQUIRE(p_kind3->add_item(1, nam_wave,  vector_10.dim, CELL_TYPE_INTEGER, &dims));
 		REQUIRE(p_kind3->add_item(2, nam_title, one_cell.dim,  CELL_TYPE_STRING,  &dims));
 
-		REQUIRE(p_kind4->new_kind(2, 4096, &attr));
+		REQUIRE(p_kind4->new_kind(2, 4096, &attr) == SERVICE_NO_ERROR);
 
 		REQUIRE(p_kind4->add_item(0, nam_buffer, video_rgb.dim, CELL_TYPE_BYTE,	  &dims));
 		REQUIRE(p_kind4->add_item(1, nam_frame,  one_cell.dim,  CELL_TYPE_STRING, &dims));
 
-		REQUIRE(!p_kind5->new_kind(2, sizeof(BlockHeader) + 4, &attr));
-		REQUIRE(!p_kind5->new_kind(2, sizeof(BlockHeader) + sizeof(StringBuffer) + 2*sizeof(ItemHeader), &attr));
+		REQUIRE(!p_kind5->new_kind(2, sizeof(BlockHeader) + 4, &attr) == SERVICE_NO_ERROR);
+		REQUIRE(!p_kind5->new_kind(2, sizeof(BlockHeader) + sizeof(StringBuffer) + 2*sizeof(ItemHeader), &attr) == SERVICE_NO_ERROR);
 
-		REQUIRE(p_kind5->new_kind(2, 4096, &attr));
+		REQUIRE(p_kind5->new_kind(2, 4096, &attr) == SERVICE_NO_ERROR);
 
 		REQUIRE(p_kind5->add_item(0, nam_buffer, video_rgb.dim, CELL_TYPE_BYTE,	  &dims));
 		REQUIRE(p_kind5->add_item(1, nam_buffer, one_cell.dim,	CELL_TYPE_STRING, &dims));
 
-		REQUIRE(p_kind6->new_kind(0, 4096, &attr) == false);
-		REQUIRE(p_kind6->new_kind(MAX_ITEMS_IN_KIND + 1, 4096, &attr) == false);
-		REQUIRE(p_kind6->new_kind(MAX_ITEMS_IN_KIND, 0, &attr) == false);
+		REQUIRE(p_kind6->new_kind(0, 4096, &attr) == SERVICE_ERROR_WRONG_ARGUMENTS);
+		REQUIRE(p_kind6->new_kind(MAX_ITEMS_IN_KIND + 1, 4096, &attr) == SERVICE_ERROR_WRONG_ARGUMENTS);
+		REQUIRE(p_kind6->new_kind(MAX_ITEMS_IN_KIND, 0, &attr) == SERVICE_ERROR_NO_MEM);
 
-		REQUIRE(p_kind6->new_kind(3, 4096, &attr));
+		REQUIRE(p_kind6->new_kind(3, 4096, &attr) == SERVICE_NO_ERROR);
 
 		REQUIRE( p_kind6->add_item( 0, nam_buffer, video_rgb.dim, CELL_TYPE_BYTE,	 &dims));
 		REQUIRE(!p_kind6->add_item(-1, nam_wave,   vector_10.dim, CELL_TYPE_INTEGER, &dims));
