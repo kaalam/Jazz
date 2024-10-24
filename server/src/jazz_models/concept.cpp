@@ -32,25 +32,15 @@
 */
 
 
-#include "src/include/jazz_elements.h"
+#include "src/jazz_models/concept.h"
 
 
-#ifndef INCLUDED_JAZZ_BEBOP
-#define INCLUDED_JAZZ_BEBOP
+namespace jazz_models
+{
 
 
-/** \brief Includes everything in namespace jazz_bebop.
+} // namespace jazz_models
 
-This is everything to run bebop code: Spaces, DataSpaces, SemSpaces, Concepts, Opcodes, Core, Bop and the Bop API.
-*/
-
-#include "src/jazz_bebop/base_api.h"
-#include "src/jazz_bebop/space.h"
-#include "src/jazz_bebop/data_space.h"
-#include "src/jazz_bebop/opcodes.h"
-#include "src/jazz_bebop/bop.h"
-#include "src/jazz_bebop/snippet.h"
-#include "src/jazz_bebop/core.h"
-
-
-#endif // ifndef INCLUDED_JAZZ_BEBOP
+#if defined CATCH_TEST
+#include "src/jazz_models/tests/test_concept.ctest"
+#endif

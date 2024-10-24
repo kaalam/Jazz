@@ -32,25 +32,31 @@
 */
 
 
-#include "src/include/jazz_elements.h"
+#include "src/include/jazz_bebop.h"
+
+#if defined CATCH_TEST
+#ifndef INCLUDED_JAZZ_CATCH2
+#define INCLUDED_JAZZ_CATCH2
+
+#include "src/catch2/catch.hpp"
+
+#endif
+#endif
 
 
-#ifndef INCLUDED_JAZZ_BEBOP
-#define INCLUDED_JAZZ_BEBOP
+#ifndef INCLUDED_JAZZ_BEBOP_CONCEPT
+#define INCLUDED_JAZZ_BEBOP_CONCEPT
 
 
-/** \brief Includes everything in namespace jazz_bebop.
+/** \brief Concepts: A tree of Snippets with support fro blending that populates a semantic space
 
-This is everything to run bebop code: Spaces, DataSpaces, SemSpaces, Concepts, Opcodes, Core, Bop and the Bop API.
+Concepts are the higher level equivalent of a Snippet with all the support fos the resolver to convert them into code.
 */
 
-#include "src/jazz_bebop/base_api.h"
-#include "src/jazz_bebop/space.h"
-#include "src/jazz_bebop/data_space.h"
-#include "src/jazz_bebop/opcodes.h"
-#include "src/jazz_bebop/bop.h"
-#include "src/jazz_bebop/snippet.h"
-#include "src/jazz_bebop/core.h"
+namespace jazz_models
+{
 
 
-#endif // ifndef INCLUDED_JAZZ_BEBOP
+} // namespace jazz_models
+
+#endif // ifndef INCLUDED_JAZZ_MODELS_CONCEPT
