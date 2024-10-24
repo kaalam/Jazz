@@ -32,22 +32,31 @@
 */
 
 
-using namespace jazz_bebop;
+#include "src/jazz_bebop/data_space.h"
 
 
-// Tests
-// -----
+#if defined CATCH_TEST
+#ifndef INCLUDED_JAZZ_CATCH2
+#define INCLUDED_JAZZ_CATCH2
 
-SCENARIO("Testing opcode") {
+#include "src/catch2/catch.hpp"
 
-//TODO: Write tests for opcode.
+#endif
+#endif
 
-	GIVEN("Something") {
-		WHEN("someone looks at it") {
-			THEN("it breaks") {
-				REQUIRE(2 > 1);
-			}
-		}
-	}
-}
 
+#ifndef INCLUDED_JAZZ_BEBOP_OPCODES
+#define INCLUDED_JAZZ_BEBOP_OPCODES
+
+
+/** \brief In Bop-25, opcodes are onnx-runtime operations.
+
+*/
+
+namespace jazz_bebop
+{
+
+
+} // namespace jazz_bebop
+
+#endif // ifndef INCLUDED_JAZZ_BEBOP_OPCODES

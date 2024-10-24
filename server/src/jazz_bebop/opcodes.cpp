@@ -32,14 +32,15 @@
 */
 
 
-#include "src/jazz_bebop/opcode.h"
+#include "src/jazz_bebop/opcodes.h"
 
 
 namespace jazz_bebop
 {
 
+
 } // namespace jazz_bebop
 
 #if defined CATCH_TEST
-#include "src/jazz_bebop/tests/test_opcode.ctest"
+#include "src/jazz_bebop/tests/test_opcodes.ctest"
 #endif
