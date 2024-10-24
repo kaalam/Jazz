@@ -34,7 +34,6 @@
 
 #include "src/jazz_bebop/data_space.h"
 
-
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2
 #define INCLUDED_JAZZ_CATCH2
