@@ -34,26 +34,6 @@
 
 #include "src/jazz_bebop/base_api.h"
 
-#if defined CATCH_TEST
-#ifndef INCLUDED_JAZZ_CATCH2
-#define INCLUDED_JAZZ_CATCH2
-
-#include "src/catch2/catch.hpp"
-
-#endif
-#endif
-
-
-#ifndef INCLUDED_JAZZ_BEBOP_SPACE
-#define INCLUDED_JAZZ_BEBOP_SPACE
-
-
-/** \brief The abstract parent of DataSpace and SemSpace.
-
-	This is the abstract parent of DataSpace and SemSpace.
-
-	\see DataSpace, SemSpace
-*/
 
 namespace jazz_bebop
 {
@@ -61,4 +41,6 @@ namespace jazz_bebop
 
 } // namespace jazz_bebop
 
-#endif // ifndef INCLUDED_JAZZ_BEBOP_SPACE
+#if defined CATCH_TEST
+#include "src/jazz_bebop/tests/test_base_api.ctest"
+#endif

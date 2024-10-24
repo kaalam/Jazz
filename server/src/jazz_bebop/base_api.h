@@ -32,7 +32,7 @@
 */
 
 
-#include "src/jazz_bebop/base_api.h"
+#include "src/include/jazz_elements.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2
@@ -44,15 +44,15 @@
 #endif
 
 
-#ifndef INCLUDED_JAZZ_BEBOP_SPACE
-#define INCLUDED_JAZZ_BEBOP_SPACE
+#ifndef INCLUDED_JAZZ_BEBOP_BASE_API
+#define INCLUDED_JAZZ_BEBOP_BASE_API
 
 
-/** \brief The abstract parent of DataSpace and SemSpace.
+/** \brief A language to access any container by base using locators.
 
-	This is the abstract parent of DataSpace and SemSpace.
+	BaseAPI is a Container and a parent of: Core, ModelsAPI and API.
 
-	\see DataSpace, SemSpace
+	\see Container, Core, ModelsAPI and API
 */
 
 namespace jazz_bebop
@@ -61,4 +61,4 @@ namespace jazz_bebop
 
 } // namespace jazz_bebop
 
-#endif // ifndef INCLUDED_JAZZ_BEBOP_SPACE
+#endif // ifndef INCLUDED_JAZZ_BEBOP_BASE_API
