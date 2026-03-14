@@ -32,30 +32,25 @@
 */
 
 
-#include "src/include/jazz_platform.h"
+#include "src/include/jazz_elements.h"
 
 
-#ifndef INCLUDED_JAZZ_ELEMENTS
-#define INCLUDED_JAZZ_ELEMENTS
+#ifndef INCLUDED_JAZZ_CORE
+#define INCLUDED_JAZZ_CORE
 
 
-/* Includes everything in namespace jazz_elements without using it by default.
+/** \brief The namespace with anything required for ONNX runtime execution running inside Jazz: BaseAPI, Snippet and Core.
 
-The namespace jazz_elements contains everything to build Jazz except the http server, the models parts and the details of the Bebop
-language implementation. This is: utilities, implementations of all the data (block, tuple, kind) and code (field) types and the most
-fundamental services: volatile (which allocates blocks in RAM) and persisted (which persists block in lmdb).
+This is the namespace is above (includes) jazz_elements and allows access to any Container in jazz_elements, via a BaseAPI.
+It separates the execution from the compilation which happen in the namespace jazz_bebop.
 */
 
 
-#include "src/jazz_elements/types.h"
-#include "src/jazz_elements/utils.h"
-#include "src/jazz_elements/block.h"
-#include "src/jazz_elements/kind.h"
-#include "src/jazz_elements/tuple.h"
-#include "src/jazz_elements/container.h"
-#include "src/jazz_elements/channel.h"
-#include "src/jazz_elements/volatile.h"
-#include "src/jazz_elements/persisted.h"
+#include "src/jazz_core/base_api.h"
+#include "src/jazz_core/std_wrap.h"
+#include "src/jazz_core/opcodes.h"
+#include "src/jazz_core/snippet.h"
+#include "src/jazz_core/core.h"
 
 
-#endif // ifndef INCLUDED_JAZZ_ELEMENTS
+#endif // ifndef INCLUDED_JAZZ_CORE

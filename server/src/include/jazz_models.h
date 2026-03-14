@@ -7,11 +7,11 @@
 
 	2. BBVA - Jazz: A lightweight analytical web server for data-driven applications.
 
-      Copyright 2016-2017 Banco Bilbao Vizcaya Argentaria, S.A.
+	  Copyright 2016-2017 Banco Bilbao Vizcaya Argentaria, S.A.
 
-      This product includes software developed at
+	  This product includes software developed at
 
-      BBVA (https://www.bbva.com/)
+	  BBVA (https://www.bbva.com/)
 
 	3. LMDB, Copyright 2011-2017 Howard Chu, Symas Corp. All rights reserved.
 
@@ -43,6 +43,7 @@
 
 This is the parent abstract model, the models manager and the API. Actual models are uplifted.
 */
+
 
 #include "src/jazz_models/data_space.h"
 #include "src/jazz_models/concept.h"

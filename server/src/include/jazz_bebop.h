@@ -7,11 +7,11 @@
 
 	2. BBVA - Jazz: A lightweight analytical web server for data-driven applications.
 
-      Copyright 2016-2017 Banco Bilbao Vizcaya Argentaria, S.A.
+	  Copyright 2016-2017 Banco Bilbao Vizcaya Argentaria, S.A.
 
-      This product includes software developed at
+	  This product includes software developed at
 
-      BBVA (https://www.bbva.com/)
+	  BBVA (https://www.bbva.com/)
 
 	3. LMDB, Copyright 2011-2017 Howard Chu, Symas Corp. All rights reserved.
 
@@ -32,29 +32,27 @@
 */
 
 
-#include "src/include/jazz_elements.h"
+#include "src/include/jazz_core.h"
 
 
 #ifndef INCLUDED_JAZZ_BEBOP
 #define INCLUDED_JAZZ_BEBOP
 
-//TODO: Review valgrind output and either fix or generate suppressions as explained in dynamic_analysis.sh
 
-/** \brief Includes everything in namespace jazz_bebop.
+/** \brief This namespace contains everything necessary to compile Bebop and the parents of the objects in Models.
 
-This is everything to run bebop code.
+Bebop is the language used manage the high level abstractions that are converted into ONNX Snippets and executed in the Core.
+Basic ONNX functionality such as running or reverse engineering ONNX pipelines created by any other way (pytorch, etc.) is
+implemented in jazz_core. Bebop is an abstraction to support composition, introspection, lensing, operators, etc. that also
+sets the groundwork for jazz_models.
 */
 
-#include "src/jazz_bebop/base_api.h"
-#include "src/jazz_bebop/std_wrap.h"
+
 #include "src/jazz_bebop/space.h"
-#include "src/jazz_bebop/opcodes.h"
-#include "src/jazz_bebop/snippet.h"
-#include "src/jazz_bebop/core.h"
 #include "src/jazz_bebop/namespace.h"
 #include "src/jazz_bebop/objects.h"
 #include "src/jazz_bebop/casters.h"
-#include "src/jazz_bebop/bop.h"
+#include "src/jazz_bebop/bebop.h"
 
 
 #endif // ifndef INCLUDED_JAZZ_BEBOP
