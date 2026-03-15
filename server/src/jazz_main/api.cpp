@@ -800,7 +800,7 @@ bool API::expand_url_encoded(pChar p_buff, int buff_size, pChar p_url) {
 
 #ifdef CATCH_TEST
 
-API	TT_API(&LOGGER, &CONFIG, &CHN, &VOL, &PER, &COR, &MDL);
+API	TT_API(&LOGGER, &CONFIG, &CHN, &VOL, &PER, &COR, &BOP, &MDL);
 
 #endif
 

@@ -143,9 +143,10 @@ StatusCode ModelsAPI::get(pTransaction &p_txn, ApiQueryState &what) {
 
 }
 
+
 #ifdef CATCH_TEST
 
-ModelsAPI MDL(&LOGGER, &CONFIG, &CHN, &VOL, &PER, &COR);
+ModelsAPI MDL(&LOGGER, &CONFIG, &CHN, &VOL, &PER, &COR, &BOP);
 
 #endif
 

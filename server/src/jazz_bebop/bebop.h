@@ -104,6 +104,17 @@ class Bebop : public BaseAPI {
 };
 typedef Bebop *pBebop;		///< A pointer to a Bebop compiler
 
+
+#ifdef CATCH_TEST
+
+// Instancing Bebop
+// ----------------
+
+extern Bebop BOP;
+
+#endif
+
+
 } // namespace jazz_bebop
 
 #endif // ifndef INCLUDED_JAZZ_BEBOP_BEBOP

@@ -184,7 +184,11 @@ void Bebop::base_names(BaseNames &base_names) {
 }
 
 
+#ifdef CATCH_TEST
 
+Bebop BOP(&LOGGER, &CONFIG, &CHN, &VOL, &PER, &COR);
+
+#endif
 
 } // namespace jazz_bebop
 

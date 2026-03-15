@@ -262,6 +262,7 @@ StatusCode Core::modify(Locator &function, pTuple p_args) {
 	return SERVICE_NOT_IMPLEMENTED;
 }
 
+
 #ifdef CATCH_TEST
 
 Core COR(&LOGGER, &CONFIG, &CHN, &VOL, &PER);

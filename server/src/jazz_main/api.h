@@ -176,6 +176,7 @@ class API : public BaseAPI {
 		int			remove_statics;	///< A flag to remove the statics from persistence on shutdown configured by REMOVE_STATICS_ON_CLOSE
 };
 
+
 #ifdef CATCH_TEST
 
 // Instancing API
