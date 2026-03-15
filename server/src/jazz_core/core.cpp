@@ -111,7 +111,8 @@ StatusCode Core::shut_down() {
 */
 void Core::base_names(BaseNames &base_names) {
 
-	base_names["onnx"]	  = this;	// Run from object
+	base_names["runtime"] = this;	// Manage onnxruntime sessions and run
+	base_names["onnx"]	  = this;	// Manage onnx pipelines assemble and disassemble
 }
 
 
