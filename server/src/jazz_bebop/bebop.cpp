@@ -122,6 +122,10 @@ namespace jazz_bebop
 
 	\param a_logger		A pointer to the logger.
 	\param a_config		A pointer to the configuration.
+	\param a_channels	A pointer to the Channels container.
+	\param a_volatile	A pointer to the Volatile container.
+	\param a_persisted	A pointer to the Persisted container.
+	\param a_core		A pointer to the Core container.
 */
 Bebop::Bebop(pLogger a_logger, pConfigFile a_config, pChannels a_channels, pVolatile a_volatile, pPersisted a_persisted, pCore a_core)
 	: BaseAPI(a_logger, a_config, a_channels, a_volatile, a_persisted) {}
