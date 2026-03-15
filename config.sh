@@ -171,12 +171,15 @@ get_descendant_name ( )
   done
 }
 
+uplifted_bop_parent='Bebop'
 uplifted_mod_parent='ModelsAPI'
 uplifted_api_parent='API'
 
+uplifted_bop_source='../uplifts/bebop/'
 uplifted_mod_source='../uplifts/models_api/'
 uplifted_api_source='../uplifts/api/'
 
+uplifted_bop=$(get_descendant_name $uplifted_bop_parent $uplifted_bop_source)
 uplifted_mod=$(get_descendant_name $uplifted_mod_parent $uplifted_mod_source)
 uplifted_api=$(get_descendant_name $uplifted_api_parent $uplifted_api_source)
 
@@ -185,6 +188,12 @@ vpath=$(echo src/*/ "$testp")
 jzpat=$(echo "$vpath" | sed 's/\ /\n/g' | grep jazz | tr '\n' ' ')
 
 cpps=$(find src/ | grep '.*jazz\(01\)\?_.*cpp$' | tr '\n' ' ')
+
+if [ "$uplifted_bop" != "$uplifted_bop_parent" ]; then
+    vpath+="$uplifted_bop_source "
+    jzpat+="$uplifted_bop_source "
+    cpps+="$(ls $uplifted_bop_source*.cpp) "
+fi
 
 if [ "$uplifted_mod" != "$uplifted_mod_parent" ]; then
     vpath+="$uplifted_mod_source "
@@ -295,6 +304,7 @@ if [[ $mode =~ 'DEBUG' ]]; then
   echo "cpps                = $cpps"
   echo "objs                = $objs"
   echo "jazz_depends        = $jazz_depends"
+  echo "uplifted_bop        = $uplifted_bop"
   echo "uplifted_mod        = $uplifted_mod"
   echo "uplifted_api        = $uplifted_api"
   echo "incl_paths          = $(printf "%s " "${incl_paths[@]}")"
@@ -431,6 +441,14 @@ uplifted_incl=""
 using_namespace_bop="0"
 using_namespace_mod="0"
 
+if [ "$uplifted_bop" != "$uplifted_bop_parent" ]; then
+  uplifted_incl+="#include \"$(ls $uplifted_bop_source*.h)\"\n"
+else
+  if [ "$using_namespace_bop" != "1" ]; then
+    uplifted_incl+="using namespace jazz_bebop;\n"
+  fi
+fi
+
 if [ "$uplifted_mod" != "$uplifted_mod_parent" ]; then
   uplifted_incl+="#include \"$(ls $uplifted_mod_source*.h)\"\n"
 else
@@ -454,6 +472,7 @@ printf "Writing: server/src/uplifted/uplifted_instances.h ... "
 printf "// This file is auto generated, do NOT edit, run ./config.sh instead
 
 $uplifted_incl
+extern $uplifted_bop BEBOP;
 extern $uplifted_mod MODELS_API;
 extern $uplifted_api HTTP_API;\n" > server/src/uplifted/uplifted_instances.h
 
@@ -464,8 +483,9 @@ printf "Writing: server/src/uplifted/uplifted_instances.cpp ... "
 
 printf "// This file is auto generated, do NOT edit, run ./config.sh instead
 
-$uplifted_mod MODELS_API(&LOGGER, &CONFIG, &CHANNELS, &VOLATILE, &PERSISTED, &CORE);
-$uplifted_api HTTP_API(&LOGGER, &CONFIG, &CHANNELS, &VOLATILE, &PERSISTED, &CORE, &MODELS_API);\n" > server/src/uplifted/uplifted_instances.cpp
+$uplifted_bop BEBOP(&LOGGER, &CONFIG, &CHANNELS, &VOLATILE, &PERSISTED, &CORE);
+$uplifted_mod MODELS_API(&LOGGER, &CONFIG, &CHANNELS, &VOLATILE, &PERSISTED, &CORE, &BEBOP);
+$uplifted_api HTTP_API(&LOGGER, &CONFIG, &CHANNELS, &VOLATILE, &PERSISTED, &CORE, &BEBOP, &MODELS_API);\n" > server/src/uplifted/uplifted_instances.cpp
 
 printf "Ok.\n"
 
