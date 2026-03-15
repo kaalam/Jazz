@@ -123,9 +123,64 @@ namespace jazz_bebop
 	\param a_logger		A pointer to the logger.
 	\param a_config		A pointer to the configuration.
 */
-Bop::Bop(pLogger a_logger, pConfigFile a_config) : Service(a_logger, a_config), opcodes(a_logger, a_config) {}
+Bebop::Bebop(pLogger a_logger, pConfigFile a_config, pChannels a_channels, pVolatile a_volatile, pPersisted a_persisted, pCore a_core)
+	: BaseAPI(a_logger, a_config, a_channels, a_volatile, a_persisted) {}
 
-Bop::~Bop() {}
+Bebop::~Bebop() {}
+
+/** Return object ID.
+
+	\return A string identifying the object that is especially useful to track uplifts and versions.
+*/
+pChar const Bebop::id() {
+    static char arr[] = "Bebop from Jazz-" JAZZ_VERSION;
+    return arr;
+}
+
+
+/** Starts the ModelsAPI service
+
+	\return SERVICE_NO_ERROR if successful, an error code otherwise.
+*/
+StatusCode Bebop::start() {
+
+	int ret = BaseAPI::start();	// This initializes the one-shot functionality.
+
+	if (ret != SERVICE_NO_ERROR)
+		return ret;
+
+//TODO: Implement Bebop::start()
+
+	return SERVICE_NO_ERROR;
+}
+
+
+/** Shuts down the ModelsAPI Service
+
+	\return SERVICE_NO_ERROR if successful, an error code otherwise.
+*/
+StatusCode Bebop::shut_down() {
+
+//TODO: Implement Bebop::shut_down()
+
+	return BaseAPI::shut_down();
+}
+
+
+/** Add the base names for this Bebop.
+
+	\param base_names	A BaseNames map passed by reference to which the base names of this object are added by this call.
+
+*/
+void Bebop::base_names(BaseNames &base_names) {
+
+	base_names["bop"]	  = this;	// The bop-25 compiler
+	base_names["bebop"]	  = this;	// The bop-25 compiler
+	base_names["compile"] = this;	// The default compiler (in case there are more than one languages)
+}
+
+
+
 
 } // namespace jazz_bebop
 

@@ -84,24 +84,25 @@
 namespace jazz_bebop
 {
 
-/** \brief Bop: The Bebop compiler and decompiler.
+/** \brief Bebop: The compiler.
 
-//TODO: Bop is not a Service!
 
 */
-class Bop : public Service {
+class Bebop : public BaseAPI {
 
 	public:
 
-		Bop(pLogger a_logger, pConfigFile a_config);
-	   ~Bop();
+		Bebop(pLogger a_logger, pConfigFile a_config, pChannels a_channels, pVolatile a_volatile, pPersisted a_persisted, pCore a_core);
+	   ~Bebop();
 
-	private:
+		virtual pChar const id();
 
-		OpCodes	opcodes;		///< The list of opcodes.
+		StatusCode start	();
+		StatusCode shut_down();
 
+		void base_names(BaseNames &base_names);
 };
-typedef Bop *pBop;		///< A pointer to a Bop
+typedef Bebop *pBebop;		///< A pointer to a Bebop compiler
 
 } // namespace jazz_bebop
 
