@@ -111,9 +111,6 @@ StatusCode Core::shut_down() {
 */
 void Core::base_names(BaseNames &base_names) {
 
-	base_names["bop"]	  = this;	// The bop-25 compiler
-	base_names["bebop"]	  = this;	// The bop-25 compiler
-	base_names["compile"] = this;	// The default compiler (in case there are more than one languages)
 	base_names["onnx"]	  = this;	// Run from object
 }
 

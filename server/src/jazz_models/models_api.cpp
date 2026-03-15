@@ -58,7 +58,8 @@ ModelsAPI::ModelsAPI(pLogger	 a_logger,
 					 pChannels	 a_channels,
 					 pVolatile	 a_volatile,
 					 pPersisted	 a_persisted,
-					 pCore		 a_core) : BaseAPI(a_logger, a_config, a_channels, a_volatile, a_persisted) {}
+					 pCore		 a_core,
+					 pBebop		 a_bebop) : BaseAPI(a_logger, a_config, a_channels, a_volatile, a_persisted) {}
 
 
 ModelsAPI::~ModelsAPI() { destroy_container(); }
