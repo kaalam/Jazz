@@ -66,27 +66,42 @@ SCENARIO("Testing all Containers start()/shut_down() at API level") {
 	REQUIRE(VOL.start()	== 0);
 	REQUIRE(PER.start() == 0);
 	REQUIRE(COR.start() == 0);
+	REQUIRE(BOP.start() == 0);
 	REQUIRE(MDL.start() == 0);
 
 	REQUIRE(TT_API.start() == 0);
 
 	GIVEN("The instances are started") {
+		int num_addresses = 0;
+		for (int i = 0; i < TENBITS_LUT_SIZE; ++i) {
+			if (TT_API.base_server[i] != nullptr)
+				++num_addresses;
+		}
+		REQUIRE(num_addresses == 16);
+
 		REQUIRE(TT_API.base_server[TenBitsAtAddress("bash")]	== &CHN);
 		REQUIRE(TT_API.base_server[TenBitsAtAddress("file")]	== &CHN);
 		REQUIRE(TT_API.base_server[TenBitsAtAddress("http")]	== &CHN);
 		REQUIRE(TT_API.base_server[TenBitsAtAddress("0-mq")]	== &CHN);
+
 		REQUIRE(TT_API.base_server[TenBitsAtAddress("deque")]	== &VOL);
 		REQUIRE(TT_API.base_server[TenBitsAtAddress("index")]	== &VOL);
 		REQUIRE(TT_API.base_server[TenBitsAtAddress("queue")]	== &VOL);
 		REQUIRE(TT_API.base_server[TenBitsAtAddress("tree")]	== &VOL);
+
 		REQUIRE(TT_API.base_server[TenBitsAtAddress("lmdb")]	== &PER);
-		REQUIRE(TT_API.base_server[TenBitsAtAddress("bop")]		== &COR);
-		REQUIRE(TT_API.base_server[TenBitsAtAddress("bebop")]	== &COR);
-		REQUIRE(TT_API.base_server[TenBitsAtAddress("compile")]	== &COR);
+
+		REQUIRE(TT_API.base_server[TenBitsAtAddress("runtime")] == &COR);
 		REQUIRE(TT_API.base_server[TenBitsAtAddress("onnx")]	== &COR);
+
+		REQUIRE(TT_API.base_server[TenBitsAtAddress("bop")]		== &BOP);
+		REQUIRE(TT_API.base_server[TenBitsAtAddress("bebop")]	== &BOP);
+		REQUIRE(TT_API.base_server[TenBitsAtAddress("compile")] == &BOP);
+
+		REQUIRE(TT_API.base_server[TenBitsAtAddress("resolve")] == &MDL);
 		REQUIRE(TT_API.base_server[TenBitsAtAddress("brane")]	== &MDL);
-		REQUIRE(TT_API.base_server[TenBitsAtAddress("resolve")]	== &MDL);
-		REQUIRE(TT_API.base_server[TenBitsAtAddress("zqt")]		== nullptr);
+
+		REQUIRE(TT_API.base_server[TenBitsAtAddress("zqt")] == nullptr);
 	}
 
 	REQUIRE(TT_API.shut_down() == 0);
@@ -95,6 +110,7 @@ SCENARIO("Testing all Containers start()/shut_down() at API level") {
 	REQUIRE(VOL.shut_down() == 0);
 	REQUIRE(PER.shut_down() == 0);
 	REQUIRE(COR.shut_down() == 0);
+	REQUIRE(BOP.shut_down() == 0);
 	REQUIRE(MDL.shut_down() == 0);
 }
 

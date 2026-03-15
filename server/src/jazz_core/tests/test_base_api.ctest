@@ -63,15 +63,24 @@ SCENARIO("Testing all Containers start()/shut_down()aat BaseAPI level") {
 		REQUIRE(BAPI.base_server[TenBitsAtAddress("file")]	  == &CHN);
 		REQUIRE(BAPI.base_server[TenBitsAtAddress("http")]	  == &CHN);
 		REQUIRE(BAPI.base_server[TenBitsAtAddress("0-mq")]	  == &CHN);
+
 		REQUIRE(BAPI.base_server[TenBitsAtAddress("deque")]	  == &VOL);
 		REQUIRE(BAPI.base_server[TenBitsAtAddress("index")]	  == &VOL);
 		REQUIRE(BAPI.base_server[TenBitsAtAddress("queue")]	  == &VOL);
 		REQUIRE(BAPI.base_server[TenBitsAtAddress("tree")]	  == &VOL);
+
 		REQUIRE(BAPI.base_server[TenBitsAtAddress("lmdb")]	  == &PER);
-		REQUIRE(BAPI.base_server[TenBitsAtAddress("compile")] == nullptr);
-		REQUIRE(BAPI.base_server[TenBitsAtAddress("resolve")] == nullptr);
+
+		REQUIRE(BAPI.base_server[TenBitsAtAddress("runtime")] == nullptr);
+		REQUIRE(BAPI.base_server[TenBitsAtAddress("onnx")]	  == nullptr);
+
 		REQUIRE(BAPI.base_server[TenBitsAtAddress("bop")]	  == nullptr);
+		REQUIRE(BAPI.base_server[TenBitsAtAddress("bebop")]	  == nullptr);
+		REQUIRE(BAPI.base_server[TenBitsAtAddress("compile")] == nullptr);
+
+		REQUIRE(BAPI.base_server[TenBitsAtAddress("resolve")] == nullptr);
 		REQUIRE(BAPI.base_server[TenBitsAtAddress("brane")]	  == nullptr);
+
 		REQUIRE(BAPI.base_server[TenBitsAtAddress("zqt")]	  == nullptr);
 	}
 
