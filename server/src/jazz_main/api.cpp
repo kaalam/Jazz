@@ -53,6 +53,7 @@ namespace jazz_main
 	\param a_volatile	A pointer to the Volatile object.
 	\param a_persisted	A pointer to the Persisted object.
 	\param a_core		A pointer to the Core object.
+	\param a_bebop		A pointer to the Bebop object.
 	\param a_model		A pointer to the ModelsAPI object.
 */
 API::API(pLogger	 a_logger,
@@ -61,9 +62,11 @@ API::API(pLogger	 a_logger,
 		 pVolatile	 a_volatile,
 		 pPersisted	 a_persisted,
 		 pCore		 a_core,
+		 pBebop		 a_bebop,
 		 pModelsAPI	 a_model) : BaseAPI(a_logger, a_config, a_channels, a_volatile, a_persisted) {
 
 	p_core	= a_core;
+	p_bebop	= a_bebop;
 	p_model	= a_model;
 
 	www	 = {};

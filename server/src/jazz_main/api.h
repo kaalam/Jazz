@@ -126,6 +126,7 @@ class API : public BaseAPI {
 			pVolatile	a_volatile,
 			pPersisted	a_persisted,
 			pCore		a_core,
+			pBebop		a_bebop,
 			pModelsAPI	a_model);
 	   ~API();
 
@@ -168,6 +169,7 @@ class API : public BaseAPI {
 								 pChar	p_url);
 
 		pCore		p_core;			///< The Core
+		pBebop		p_bebop;		///< The Bebop compiler
 		pModelsAPI	p_model;		///< The ModelsAPI
 
 		Index		www;			///< A map from url to locators to serve static files
