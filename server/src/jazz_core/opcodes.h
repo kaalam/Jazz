@@ -32,7 +32,7 @@
 */
 
 
-#include "src/jazz_bebop/space.h"
+#include "src/jazz_core/std_wrap.h"
 #include "src/onnx_proto/onnx.pb.h"
 #include "onnxruntime_c_api.h"
 
@@ -55,7 +55,7 @@
 //TODO: OpCode is not a Service!
 
 */
-namespace jazz_bebop
+namespace jazz_core
 {
 
 /** \brief A type definition for tensors across all the technologies: Jazz native, ONNX protocol buffer and ONNX runtime.
@@ -260,6 +260,6 @@ class OpCodes : public Service {
 };
 typedef OpCodes *pOpCodes;		///< A pointer to an OpCodes object
 
-} // namespace jazz_bebop
+} // namespace jazz_core
 
 #endif // ifndef INCLUDED_JAZZ_BEBOP_OPCODES

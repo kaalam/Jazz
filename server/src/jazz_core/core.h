@@ -32,7 +32,7 @@
 */
 
 
-#include "src/jazz_bebop/snippet.h"
+#include "src/jazz_core/snippet.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2
@@ -57,7 +57,7 @@
 A core is not a service, it is stored in a Bop API.
 */
 
-namespace jazz_bebop
+namespace jazz_core
 {
 
 using namespace jazz_elements;
@@ -168,6 +168,6 @@ extern Core COR;
 
 #endif
 
-} // namespace jazz_bebop
+} // namespace jazz_core
 
 #endif // ifndef INCLUDED_JAZZ_BEBOP_CORE

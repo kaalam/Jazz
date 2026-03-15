@@ -35,10 +35,10 @@
 // This is a double inclusion! It is required for VSCode' Intellisense to work properly. This file is itself included in the
 // .cpp file of the same name for unit testing. It has no effect on compilation.
 #pragma once
-#include "src/jazz_bebop/opcodes.h"
+#include "src/jazz_core/opcodes.h"
 
 
-using namespace jazz_bebop;
+using namespace jazz_core;
 
 
 // Tests

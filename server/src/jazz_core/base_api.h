@@ -54,7 +54,7 @@
 
 	\see Container, Core, ModelsAPI and API
 */
-namespace jazz_bebop
+namespace jazz_core
 {
 
 using namespace jazz_elements;
@@ -665,6 +665,6 @@ extern BaseAPI	BAPI;
 
 #endif
 
-} // namespace jazz_bebop
+} // namespace jazz_core
 
 #endif // ifndef INCLUDED_JAZZ_BEBOP_BASE_API

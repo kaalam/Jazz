@@ -32,19 +32,27 @@
 */
 
 
-// #include <stl_whatever>
+// This is a double inclusion! It is required for VSCode' Intellisense to work properly. This file is itself included in the
+// .cpp file of the same name for unit testing. It has no effect on compilation.
+#pragma once
+#include "src/jazz_core/core.h"
 
 
-#include "src/jazz_bebop/std_wrap.h"
+using namespace jazz_core;
 
 
-namespace jazz_bebop
-{
+// Tests
+// -----
 
-// This is header-only
+SCENARIO("Testing core") {
 
-} // namespace jazz_bebop
+//TODO: Write tests for core.
 
-#if defined CATCH_TEST
-#include "src/jazz_bebop/tests/test_std_wrap.ctest"
-#endif
+	GIVEN("Something") {
+		WHEN("someone looks at it") {
+			THEN("it breaks") {
+				REQUIRE(2 > 1);
+			}
+		}
+	}
+}

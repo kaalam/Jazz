@@ -32,10 +32,10 @@
 */
 
 
-#include "src/jazz_bebop/snippet.h"
+#include "src/jazz_core/snippet.h"
 
 
-namespace jazz_bebop
+namespace jazz_core
 {
 
 /*	-----------------------------------------------
@@ -140,8 +140,8 @@ void* Snippet::get_object() {
 	return nullptr;
 }
 
-} // namespace jazz_bebop
+} // namespace jazz_core
 
 #if defined CATCH_TEST
-#include "src/jazz_bebop/tests/test_snippet.ctest"
+#include "src/jazz_core/tests/test_snippet.ctest"
 #endif

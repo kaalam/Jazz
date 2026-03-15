@@ -32,10 +32,10 @@
 */
 
 
-#include "src/jazz_bebop/base_api.h"
+#include "src/jazz_core/base_api.h"
 
 
-namespace jazz_bebop
+namespace jazz_core
 {
 
 /*	-----------------------------------------------
@@ -1013,8 +1013,8 @@ BaseAPI BAPI(&LOGGER, &CONFIG, &CHN, &VOL, &PER);
 
 #endif
 
-} // namespace jazz_bebop
+} // namespace jazz_core
 
 #if defined CATCH_TEST
-#include "src/jazz_bebop/tests/test_base_api.ctest"
+#include "src/jazz_core/tests/test_base_api.ctest"
 #endif

@@ -32,7 +32,7 @@
 */
 
 
-#include "src/jazz_bebop/opcodes.h"
+#include "src/jazz_core/opcodes.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2
@@ -57,7 +57,7 @@ It supports a number of serializations to and from Jazz Blocks. It forms the min
 
 //TODO: Synchronize http://localhost:8888/jazz_reference/api_ref_core.html (Erase this only when Core is done.)
 
-namespace jazz_bebop
+namespace jazz_core
 {
 
 /** The kind of a Snippet
@@ -183,6 +183,6 @@ class Snippet : public Tuple {
 };
 typedef Snippet *pSnippet;		///< A pointer to a Snippet
 
-} // namespace jazz_bebop
+} // namespace jazz_core
 
 #endif // ifndef INCLUDED_JAZZ_BEBOP_SNIPPET

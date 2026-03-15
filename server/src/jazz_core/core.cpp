@@ -32,10 +32,10 @@
 */
 
 
-#include "src/jazz_bebop/core.h"
+#include "src/jazz_core/core.h"
 
 
-namespace jazz_bebop
+namespace jazz_core
 {
 
 using namespace jazz_elements;
@@ -271,8 +271,8 @@ Core COR(&LOGGER, &CONFIG, &CHN, &VOL, &PER);
 
 #endif
 
-} // namespace jazz_bebop
+} // namespace jazz_core
 
 #if defined CATCH_TEST
-#include "src/jazz_bebop/tests/test_core.ctest"
+#include "src/jazz_core/tests/test_core.ctest"
 #endif

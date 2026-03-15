@@ -32,7 +32,7 @@
 */
 
 
-#include "src/jazz_bebop/base_api.h"
+#include "src/jazz_core/base_api.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2
@@ -54,7 +54,7 @@
 	which is just a Locator with some operators), stdAPIQueryStates (a vector of stdAPIQueryState which is just an ApiQueryState
 	with some operators) and stdUrls (a vector of String (an std::string)).
 */
-namespace jazz_bebop
+namespace jazz_core
 {
 
 /** \brief A wrapped Name that supports being stacked in an std::vector and used as a key in an std::map.
@@ -205,6 +205,6 @@ typedef std::vector<stdAPIQueryState> stdAPIQueryStates;	///< A vector of stdAPI
 
 typedef std::vector<String> stdUrls;						///< A vector of String (an std::string)
 
-} // namespace jazz_bebop
+} // namespace jazz_core
 
 #endif // ifndef INCLUDED_JAZZ_BEBOP_LOCATORS

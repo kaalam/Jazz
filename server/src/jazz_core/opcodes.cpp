@@ -32,10 +32,10 @@
 */
 
 
-#include "src/jazz_bebop/opcodes.h"
+#include "src/jazz_core/opcodes.h"
 
 
-namespace jazz_bebop
+namespace jazz_core
 {
 
 /** \brief A table to locate all the possible ONNX tensor types by their name in the config file "onnx.ini".
@@ -363,8 +363,8 @@ bool OpCodes::fill_attribute_type(AttributeType &type, String &type_name) {
 	return true;
 }
 
-} // namespace jazz_bebop
+} // namespace jazz_core
 
 #if defined CATCH_TEST
-#include "src/jazz_bebop/tests/test_opcodes.ctest"
+#include "src/jazz_core/tests/test_opcodes.ctest"
 #endif
