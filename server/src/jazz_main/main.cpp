@@ -200,7 +200,17 @@ int main(int argc, char* argv[]) {
 			exit(EXIT_FAILURE);
 		}
 
+		if (!start_service(&BEBOP)) {
+			stop_service(&CORE);
+			stop_service(&PERSISTED);
+			stop_service(&VOLATILE);
+			stop_service(&CHANNELS);
+
+			exit(EXIT_FAILURE);
+		}
+
 		if (!start_service(&MODELS_API)) {
+			stop_service(&BEBOP);
 			stop_service(&CORE);
 			stop_service(&PERSISTED);
 			stop_service(&VOLATILE);
@@ -211,6 +221,7 @@ int main(int argc, char* argv[]) {
 
 		if (!start_service(&HTTP_API)) {
 			stop_service(&MODELS_API);
+			stop_service(&BEBOP);
 			stop_service(&CORE);
 			stop_service(&PERSISTED);
 			stop_service(&VOLATILE);
@@ -226,6 +237,7 @@ int main(int argc, char* argv[]) {
 			stop_service(&HTTP);
 			stop_service(&HTTP_API);
 			stop_service(&MODELS_API);
+			stop_service(&BEBOP);
 			stop_service(&CORE);
 			stop_service(&PERSISTED);
 			stop_service(&VOLATILE);

@@ -452,6 +452,8 @@ void signalHandler_SIGTERM(int signum) {
 
 	if (!stop_service(&MODELS_API)) stop_ok = false;
 
+	if (!stop_service(&BEBOP))      stop_ok = false;
+
 	if (!stop_service(&CORE))	    stop_ok = false;
 
 	if (!stop_service(&PERSISTED))  stop_ok = false;
