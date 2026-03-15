@@ -32,7 +32,7 @@
 */
 
 
-#include "src/jazz_bebop/std_wrap.h"
+#include "src/include/jazz_core.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2
@@ -50,6 +50,8 @@
 
 namespace jazz_bebop
 {
+
+using namespace jazz_elements;
 
 typedef uint64_t RowNumber;		///< A row number in a Space
 typedef Name	 ColumnName;	///< A column name in a Space

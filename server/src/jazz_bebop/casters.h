@@ -56,6 +56,8 @@
 namespace jazz_bebop
 {
 
+using namespace jazz_core;
+
 /** \brief Caster: An optional converter of the output.
 
 	This is a function that converts the result returned by a Space.get_row(). It can be a conversion from text to tokens or vice versa,

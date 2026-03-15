@@ -32,7 +32,7 @@
 */
 
 
-#include "src/jazz_bebop/core.h"
+#include "src/jazz_bebop/space.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2

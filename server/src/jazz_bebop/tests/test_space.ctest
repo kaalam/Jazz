@@ -45,9 +45,6 @@ using namespace jazz_bebop;
 // -----
 
 SCENARIO("Testing Space") {
-
-//TODO: Write tests for bop.
-
 	GIVEN("Something") {
 		WHEN("someone looks at it") {
 			THEN("it breaks") {
