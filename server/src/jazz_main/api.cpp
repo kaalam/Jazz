@@ -107,6 +107,7 @@ StatusCode API::start() {
 	BaseNames base = {};
 
 	p_core->base_names(base);
+	p_bebop->base_names(base);
 	p_model->base_names(base);
 
 	for (BaseNames::iterator it = base.begin(); it != base.end(); ++it) {
@@ -428,7 +429,7 @@ MHD_StatusCode API::http_get(pMHD_Response &response, ApiQueryState &q_state) {
 	switch (q_state.apply) {
 	case APPLY_NOTHING ... APPLY_TEXT: {
 		pBaseAPI p_base_api = (pBaseAPI) base_server[TenBitsAtAddress(q_state.base)];
-		p_base_api = (p_base_api == p_core || p_base_api == p_model) ? p_base_api : this;
+		p_base_api = (p_base_api == p_core || p_base_api == p_bebop || p_base_api == p_model) ? p_base_api : this;
 
 		switch (p_base_api->get(p_txn, q_state)) {
 		case SERVICE_NO_ERROR:
