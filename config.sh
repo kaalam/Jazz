@@ -156,7 +156,7 @@ get_descendant_name ( )
   fi
 
   dep=$(ls $module_path*.h)
-  rex="^class *([[:alpha:]_]+).*public.*$parent_class.*$"
+  rex="^class[[:space:]]+([[:alnum:]_]+)[[:space:]]+.*public.*$parent_class.*$"
 
   for dp in $dep; do
     if [ -f "$dp" ]; then
