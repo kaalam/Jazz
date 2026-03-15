@@ -32,7 +32,7 @@
 */
 
 
-#include "src/jazz_bebop/bop.h"
+#include "src/jazz_bebop/bebop.h"
 
 
 //TODO: All this Fields idea is obsolete. The Fields server is just a Space, but the function is still needed.
@@ -130,5 +130,5 @@ Bop::~Bop() {}
 } // namespace jazz_bebop
 
 #if defined CATCH_TEST
-#include "src/jazz_bebop/tests/test_bop.ctest"
+#include "src/jazz_bebop/tests/test_bebop.ctest"
 #endif

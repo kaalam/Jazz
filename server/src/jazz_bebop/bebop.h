@@ -44,8 +44,8 @@
 #endif
 
 
-#ifndef INCLUDED_JAZZ_BEBOP_BOP
-#define INCLUDED_JAZZ_BEBOP_BOP
+#ifndef INCLUDED_JAZZ_BEBOP_BEBOP
+#define INCLUDED_JAZZ_BEBOP_BEBOP
 
 
 //TODO: All this Fields idea is obsolete. The Fields server is just a Space, but the function is still needed.
@@ -105,4 +105,4 @@ typedef Bop *pBop;		///< A pointer to a Bop
 
 } // namespace jazz_bebop
 
-#endif // ifndef INCLUDED_JAZZ_BEBOP_BOP
+#endif // ifndef INCLUDED_JAZZ_BEBOP_BEBOP
