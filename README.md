@@ -37,6 +37,7 @@ Special thanks to Roberto Maestre and Israel Herraiz who have been discussing th
   - Jazz version 0.5.3 is the version released with The Tangle.
   - Jazz version 0.6.1 was Bebop and abandoned when Bebop-25 and ONNX became the new paradigm.
   - Jazz version 1.25.1 is Bebop-25 development
+  - Jazz version 1.26.x is Bebop redesign with an independent core namespace and Bebop uplifts.
 
   - The development repositories:
 
