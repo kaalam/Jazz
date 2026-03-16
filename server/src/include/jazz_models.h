@@ -39,7 +39,7 @@
 #define INCLUDED_JAZZ_MODELS
 
 
-/** \brief Includes everything Jazz models.
+/** \brief Jazz models are services inside ModelsAPI providing abstractions (DataSpace, Concept, SemSpace) resolved by a Model.
 
 This is the parent abstract model, the models manager and the API. Actual models are uplifted.
 */

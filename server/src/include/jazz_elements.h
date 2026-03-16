@@ -41,9 +41,8 @@
 
 /* Includes everything in namespace jazz_elements without using it by default.
 
-The namespace jazz_elements contains everything to build Jazz except the http server, the models parts and the details of the Bebop
-language implementation. This is: utilities, implementations of all the data (block, tuple, kind) and code (field) types and the most
-fundamental services: volatile (which allocates blocks in RAM) and persisted (which persists block in lmdb).
+The namespace jazz_elements contains every fundamental data class (Block, Kind, Tuple) and the Containers used to store and communicate
+them (Channels, Volatile, Persisted). It also contains the basic types and utils used by those classes.
 */
 
 

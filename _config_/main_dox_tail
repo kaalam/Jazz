@@ -11,24 +11,25 @@ The maturity level of the different modules is:\n
 Maturity | Description
 -------- | -----------
 nothing  | Code is complete, tested and already was in previous versions.
-[v.m.r]  | Code under active development and will be released when the version `v.m.r` is complete.
+[yyQn]   | Code under active development and will be released when the version `v.m.r` is complete.
 \n
 
 There are three C++ namespaces, intended for general c++ Jazz programming, possibly using external Jazz servers, but not necessarily as
 implemented as an http server:
 
-1. jazz_elements (All the pieces: Blocks, Kinds, Tuples, storage, communication, services, etc.)\n
-2. jazz_bebop (Everything to run Bebop (just Bop) code: Spaces, Concepts, Opcodes, Cores and the compiler itself.)\n
-3. jazz_models (Model algorithms, including the resolver and tools to expose them via API)\n
+1. jazz_elements -- The namespace jazz_elements contains every fundamental data class (Block, Kind, Tuple) and the Containers used to store and communicate them (Channels, Volatile, Persisted). It also contains the basic types and utils used by those classes.\n
+2. jazz_core -- The namespace with anything required for ONNX runtime execution running inside Jazz: BaseAPI, Snippet and Core.\n
+3. jazz_bebop -- This namespace contains everything necessary to compile Bebop and the parents of the objects in Models.\n
+4. jazz_models --- Jazz models are services inside ModelsAPI providing abstractions (DataSpace, Concept, SemSpace) resolved by a Model.\n
 \n
 
 Additionally, there is a namespace for the server:
 \n\n
 
-4. jazz_main (putting it all together, the http API and the server)
+5. jazz_main -- Putting it all together as a monolithic HTTP server.
 \n
 
-And, of course, Jazz development is about making the server run Bebop code and interfacing via REST using python or any front-end tech via
+And, of course, Jazz development is about making the server run Bebop code and interfacing via REST using Python or any front-end tech via
 the REST API.\n
 
 \n
