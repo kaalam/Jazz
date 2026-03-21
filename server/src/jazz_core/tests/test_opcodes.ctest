@@ -271,3 +271,110 @@ SCENARIO("Testing opcodes") {
 
 	REQUIRE(opset.shut_down() == 0);
 }
+
+
+SCENARIO("Coverage-focused opcodes error branches") {
+	auto fill_should_fail = [&](std::initializer_list<std::pair<const char *, const char *>> keys) {
+		ConfigFile conf(nullptr);
+		OpCodes ops = OpCodes(&LOGGER, &conf);
+
+		for (const auto &it : keys) {
+			ops.onnx_conf.debug_put(it.first, it.second);
+		}
+
+		OnnxOpCode op((pChar) "Mini", 1, OnnxParameters(), OnnxParameters(), OnnxAttributes());
+
+		return !ops.fill_op_code(op);
+	};
+
+	WHEN("start() finds missing or broken configuration") {
+		ConfigFile conf_missing_ir(nullptr);
+		conf_missing_ir.debug_put("ONNX_OPCODE_DEFS_FN", "/tmp/jzz_unit_missing_ir.ini");
+
+		OpCodes ops_missing_ir = OpCodes(&LOGGER, &conf_missing_ir);
+
+		ops_missing_ir.log_error_level = LOG_DEBUG;
+		REQUIRE(ops_missing_ir.start() == SERVICE_ERROR_BAD_CONFIG);
+
+		ConfigFile conf_missing_defs(nullptr);
+		conf_missing_defs.debug_put("ONNX_IR_VERSION", "10");
+
+		OpCodes ops_missing_defs = OpCodes(&LOGGER, &conf_missing_defs);
+
+		ops_missing_defs.log_error_level = LOG_DEBUG;
+		REQUIRE(ops_missing_defs.start() == SERVICE_ERROR_BAD_CONFIG);
+
+		ConfigFile conf_missing_file(nullptr);
+		conf_missing_file.debug_put("ONNX_IR_VERSION", "10");
+		conf_missing_file.debug_put("ONNX_OPCODE_DEFS_FN", "/tmp/jzz_unit_opcodes_missing_file.ini");
+
+		OpCodes ops_missing_file = OpCodes(&LOGGER, &conf_missing_file);
+
+		ops_missing_file.log_error_level = LOG_DEBUG;
+		REQUIRE(ops_missing_file.start() == SERVICE_ERROR_IO_ERROR);
+
+		char fn_no_name_vers[MAX_FILE_OR_URL_SIZE];
+		sprintf(fn_no_name_vers, "/tmp/jzz_unit_opcodes_no_name_vers_%i.ini", (int) getpid());
+		remove(fn_no_name_vers);
+
+		std::ofstream fh_no_name_vers;
+		fh_no_name_vers.open(fn_no_name_vers);
+		fh_no_name_vers << "__names = Mini\n";
+		fh_no_name_vers << "Mini.1.num_inputs = 0\n";
+		fh_no_name_vers.close();
+
+		ConfigFile conf_no_name_vers(nullptr);
+		conf_no_name_vers.debug_put("ONNX_IR_VERSION", "10");
+		conf_no_name_vers.debug_put("ONNX_OPCODE_DEFS_FN", fn_no_name_vers);
+
+		OpCodes ops_no_name_vers = OpCodes(&LOGGER, &conf_no_name_vers);
+
+		ops_no_name_vers.log_error_level = LOG_DEBUG;
+		REQUIRE(ops_no_name_vers.start() == SERVICE_ERROR_IO_ERROR);
+
+		remove(fn_no_name_vers);
+	}
+
+	WHEN("build_opcode_dict() fails in malformed and incomplete definitions") {
+		ConfigFile conf_missing_name_vers(nullptr);
+		OpCodes ops_missing_name_vers = OpCodes(&LOGGER, &conf_missing_name_vers);
+
+		REQUIRE(!ops_missing_name_vers.build_opcode_dict());
+
+		ConfigFile conf_bad_name_vers(nullptr);
+		OpCodes ops_bad_name_vers = OpCodes(&LOGGER, &conf_bad_name_vers);
+		ops_bad_name_vers.onnx_conf.debug_put("__name_vers", "Mini.x");
+
+		REQUIRE(!ops_bad_name_vers.build_opcode_dict());
+
+		ConfigFile conf_incomplete_opcode(nullptr);
+		OpCodes ops_incomplete_opcode = OpCodes(&LOGGER, &conf_incomplete_opcode);
+		ops_incomplete_opcode.onnx_conf.debug_put("__name_vers", "Mini.1");
+
+		REQUIRE(!ops_incomplete_opcode.build_opcode_dict());
+	}
+
+	WHEN("fill_op_code() hits early returns for missing keys and invalid types") {
+		REQUIRE(fill_should_fail({}));
+		REQUIRE(fill_should_fail({{"Mini.1.num_inputs", "1"}}));
+		REQUIRE(fill_should_fail({{"Mini.1.num_inputs", "1"}, {"Mini.1.input.0.name", "x"}}));
+		REQUIRE(fill_should_fail({{"Mini.1.num_inputs", "1"}, {"Mini.1.input.0.name", "x"}, {"Mini.1.input.0.tensor_types", "ethereal"}}));
+
+		REQUIRE(fill_should_fail({{"Mini.1.num_inputs", "0"}}));
+		REQUIRE(fill_should_fail({{"Mini.1.num_inputs", "0"}, {"Mini.1.num_outputs", "1"}}));
+		REQUIRE(fill_should_fail({{"Mini.1.num_inputs", "0"}, {"Mini.1.num_outputs", "1"}, {"Mini.1.output.0.name", "y"}}));
+		REQUIRE(fill_should_fail({{"Mini.1.num_inputs", "0"}, {"Mini.1.num_outputs", "1"}, {"Mini.1.output.0.name", "y"}, {"Mini.1.output.0.tensor_types", "ethereal"}}));
+
+		REQUIRE(fill_should_fail({{"Mini.1.num_inputs", "0"}, {"Mini.1.num_outputs", "0"}}));
+		REQUIRE(fill_should_fail({{"Mini.1.num_inputs", "0"}, {"Mini.1.num_outputs", "0"}, {"Mini.1.num_attributes", "1"}}));
+		REQUIRE(fill_should_fail({{"Mini.1.num_inputs", "0"}, {"Mini.1.num_outputs", "0"}, {"Mini.1.num_attributes", "1"}, {"Mini.1.attribute.0.name", "axis"}}));
+		REQUIRE(fill_should_fail({{"Mini.1.num_inputs", "0"}, {"Mini.1.num_outputs", "0"}, {"Mini.1.num_attributes", "1"}, {"Mini.1.attribute.0.name", "axis"}, {"Mini.1.attribute.0.type", "ethereal"}}));
+	}
+
+	WHEN("fill_all_dict_versions() fails without __names") {
+		ConfigFile conf_no_names(nullptr);
+		OpCodes ops_no_names = OpCodes(&LOGGER, &conf_no_names);
+
+		REQUIRE(!ops_no_names.fill_all_dict_versions());
+	}
+}
