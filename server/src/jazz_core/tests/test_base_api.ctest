@@ -2657,6 +2657,411 @@ SCENARIO("Testing BaseAPI protected: move_const(), get_right_local(), get_right_
 }
 
 
+SCENARIO("Direct edge cases for BaseAPI.get_right_local() and BaseAPI.get_left_local() with handcrafted ApiQueryState") {
+
+	GIVEN("The instances are constructed, but not yet started") {
+		REQUIRE(BAPI.p_channels	 == &CHN);
+		REQUIRE(BAPI.p_volatile	 == &VOL);
+		REQUIRE(BAPI.p_persisted == &PER);
+	}
+
+	REQUIRE(CHN.start()	== 0);
+	REQUIRE(VOL.start()	== 0);
+	REQUIRE(PER.start() == 0);
+
+	REQUIRE(BAPI.start() == 0);
+
+	GIVEN("The BaseAPI is running and we prepare synthetic fixtures") {
+		ApiQueryState prep_state;
+		pTransaction	 prep_txn = (pTransaction) &prep_state;
+
+		REQUIRE(BAPI.parse(prep_state, (pChar) "//lmdb/tt4edge.new", BASE_API_GET));
+		REQUIRE(BAPI.get(prep_txn, prep_state) == SERVICE_NO_ERROR);
+		REQUIRE(prep_txn == nullptr);
+
+		prep_txn = (pTransaction) &prep_state;
+		REQUIRE(BAPI.parse(prep_state, (pChar) "//lmdb/tt4edge/bl1=&[[1,2],[3,4]];", BASE_API_GET));
+		REQUIRE(BAPI.get(prep_txn, prep_state) == SERVICE_NO_ERROR);
+		REQUIRE(prep_txn == nullptr);
+
+		prep_txn = (pTransaction) &prep_state;
+		REQUIRE(BAPI.parse(prep_state, (pChar) "//lmdb/tt4edge/bl2=&[1,0];", BASE_API_GET));
+		REQUIRE(BAPI.get(prep_txn, prep_state) == SERVICE_NO_ERROR);
+		REQUIRE(prep_txn == nullptr);
+
+		prep_txn = (pTransaction) &prep_state;
+		REQUIRE(BAPI.parse(prep_state, (pChar) "//lmdb/tt4edge/filter=&[0,1];", BASE_API_GET));
+		REQUIRE(BAPI.get(prep_txn, prep_state) == SERVICE_NO_ERROR);
+		REQUIRE(prep_txn == nullptr);
+
+		ApiQueryState q_state;
+		pTransaction  p_txn = nullptr;
+
+		auto clear_state = [&]() {
+			memset(&q_state, 0, sizeof(q_state));
+			p_txn = nullptr;
+		};
+
+		auto destroy_if_any = [&](pTransaction &p_any) {
+			if (p_any != nullptr) {
+				p_any->p_owner->destroy_transaction(p_any);
+				REQUIRE(p_any == nullptr);
+			}
+		};
+
+		auto set_loc = [&](Locator &loc, const char *base, const char *entity, const char *key) {
+			memset(&loc, 0, sizeof(loc));
+			strcpy(loc.base, base);
+			strcpy(loc.entity, entity);
+			if (key != nullptr && key[0] != 0)
+				strcpy(loc.key, key);
+		};
+
+		auto set_left = [&](const char *base, const char *entity, const char *key) {
+			memset(q_state.base, 0, sizeof(q_state.base));
+			memset(q_state.entity, 0, sizeof(q_state.entity));
+			memset(q_state.key, 0, sizeof(q_state.key));
+
+			strcpy(q_state.base, base);
+			strcpy(q_state.entity, entity);
+			if (key != nullptr && key[0] != 0)
+				strcpy(q_state.key, key);
+		};
+
+		pContainer p_lmdb = (pContainer) BAPI.base_server[TenBitsAtAddress("lmdb")];
+		REQUIRE(p_lmdb != nullptr);
+
+		WHEN("We call get_right_local() directly with handcrafted edge inputs") {
+			pTransaction p_expected = nullptr;
+			StatusCode expected_ret;
+
+			clear_state();
+			q_state.apply = APPLY_ASSIGN_NOTHING;
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "missing");
+			expected_ret = p_lmdb->get(p_expected, q_state.r_value);
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == expected_ret);
+			destroy_if_any(p_expected);
+			destroy_if_any(p_txn);
+
+			clear_state();
+			q_state.apply = APPLY_ASSIGN_NAME;
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+			strcpy(q_state.name, "missing_name");
+			expected_ret = p_lmdb->get(p_expected, q_state.r_value, q_state.name);
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == expected_ret);
+			destroy_if_any(p_expected);
+			destroy_if_any(p_txn);
+
+			clear_state();
+			q_state.apply = APPLY_ASSIGN_URL;
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+			strcpy(q_state.url, "//lmdb/tt4edge/bl1");
+			expected_ret = p_lmdb->get(p_expected, (pChar) q_state.url);
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == expected_ret);
+			destroy_if_any(p_expected);
+			destroy_if_any(p_txn);
+
+			clear_state();
+			q_state.apply = APPLY_ASSIGN_FUNCT_CONST;
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "some_key");
+			strcpy(q_state.url, "const-value");
+			BAPI.debug_trigger_failure = TRIGGER_FAIL_NEW_STRING_BLOCK;
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_ERROR_WRONG_ARGUMENTS);
+			BAPI.debug_trigger_failure = 0;
+			REQUIRE(p_txn == nullptr);
+
+			clear_state();
+			q_state.apply = APPLY_ASSIGN_FILTER;
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+			set_loc(q_state.rr_value, "no_base", "x", "y");
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_ERROR_WRONG_BASE);
+			REQUIRE(p_txn == nullptr);
+
+			clear_state();
+			q_state.apply = APPLY_ASSIGN_FILTER;
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+			set_loc(q_state.rr_value, "lmdb", "tt4edge", "missing");
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_ERROR_BLOCK_NOT_FOUND);
+			REQUIRE(p_txn == nullptr);
+
+			clear_state();
+			q_state.apply = APPLY_ASSIGN_FILTER;
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+			set_loc(q_state.rr_value, "lmdb", "tt4edge", "filter");
+			{
+				pTransaction p_aux = nullptr;
+				REQUIRE(p_lmdb->get(p_aux, q_state.rr_value) == SERVICE_NO_ERROR);
+				expected_ret = p_lmdb->get(p_expected, q_state.r_value, p_aux->p_block);
+				expected_ret = expected_ret == SERVICE_NO_ERROR ? SERVICE_NO_ERROR : SERVICE_ERROR_IO_ERROR;
+				destroy_if_any(p_expected);
+				p_lmdb->destroy_transaction(p_aux);
+				REQUIRE(p_aux == nullptr);
+			}
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == expected_ret);
+			destroy_if_any(p_txn);
+
+			clear_state();
+			q_state.apply = APPLY_ASSIGN_FILT_CONST;
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+			strcpy(q_state.url, "const-filter");
+			BAPI.debug_trigger_failure = TRIGGER_FAIL_NEW_STRING_BLOCK;
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_ERROR_WRONG_ARGUMENTS);
+			BAPI.debug_trigger_failure = 0;
+			REQUIRE(p_txn == nullptr);
+
+			clear_state();
+			q_state.apply = APPLY_ASSIGN_FILT_CONST;
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+			strcpy(q_state.url, "const-filter");
+			{
+				pTransaction p_aux = nullptr;
+				REQUIRE(BAPI.block_from_const(p_aux, q_state.url));
+				expected_ret = p_lmdb->get(p_expected, q_state.r_value, p_aux->p_block);
+				expected_ret = expected_ret == SERVICE_NO_ERROR ? SERVICE_NO_ERROR : SERVICE_ERROR_IO_ERROR;
+				destroy_if_any(p_expected);
+				destroy_if_any(p_aux);
+			}
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == expected_ret);
+			destroy_if_any(p_txn);
+
+			clear_state();
+			q_state.apply = APPLY_ASSIGN_RAW;
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "missing");
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_ERROR_BLOCK_NOT_FOUND);
+			REQUIRE(p_txn == nullptr);
+
+			clear_state();
+			q_state.apply = APPLY_ASSIGN_RAW;
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
+			destroy_if_any(p_txn);
+
+			clear_state();
+			q_state.apply = APPLY_ASSIGN_TEXT;
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "missing");
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_ERROR_BLOCK_NOT_FOUND);
+			REQUIRE(p_txn == nullptr);
+
+			clear_state();
+			q_state.apply = APPLY_ASSIGN_TEXT;
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_NO_ERROR);
+			destroy_if_any(p_txn);
+		}
+
+			WHEN("We call get_left_local() directly with handcrafted edge inputs") {
+				pTransaction p_expected = nullptr;
+				StatusCode expected_ret;
+				Locator loc;
+
+			clear_state();
+			q_state.apply = APPLY_URL;
+			set_left("lmdb", "tt4edge", "bl1");
+			strcpy(q_state.url, "//lmdb/tt4edge/bl1");
+			expected_ret = p_lmdb->get(p_expected, (pChar) q_state.url);
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == expected_ret);
+			destroy_if_any(p_expected);
+			destroy_if_any(p_txn);
+
+			clear_state();
+			q_state.apply = APPLY_FUNCT_CONST;
+			set_left("lmdb", "tt4edge", "some_key");
+			strcpy(q_state.url, "const-value");
+			BAPI.debug_trigger_failure = TRIGGER_FAIL_NEW_STRING_BLOCK;
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_ERROR_WRONG_ARGUMENTS);
+			BAPI.debug_trigger_failure = 0;
+			REQUIRE(p_txn == nullptr);
+
+			clear_state();
+			q_state.apply = APPLY_FILTER;
+			set_left("lmdb", "tt4edge", "bl1");
+			set_loc(q_state.r_value, "no_base", "x", "y");
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_ERROR_WRONG_BASE);
+			REQUIRE(p_txn == nullptr);
+
+			clear_state();
+			q_state.apply = APPLY_FILTER;
+			set_left("lmdb", "tt4edge", "bl1");
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "missing");
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_ERROR_BLOCK_NOT_FOUND);
+			REQUIRE(p_txn == nullptr);
+
+			clear_state();
+			q_state.apply = APPLY_FILTER;
+			set_left("lmdb", "tt4edge", "bl1");
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "filter");
+			{
+				pTransaction p_aux = nullptr;
+				REQUIRE(p_lmdb->get(p_aux, q_state.r_value) == SERVICE_NO_ERROR);
+				memcpy(&loc, &q_state.base, SIZE_OF_BASE_ENT_KEY);
+				expected_ret = p_lmdb->get(p_expected, loc, p_aux->p_block);
+				expected_ret = expected_ret == SERVICE_NO_ERROR ? SERVICE_NO_ERROR : SERVICE_ERROR_IO_ERROR;
+				destroy_if_any(p_expected);
+				p_lmdb->destroy_transaction(p_aux);
+				REQUIRE(p_aux == nullptr);
+			}
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == expected_ret);
+			destroy_if_any(p_txn);
+
+			clear_state();
+			q_state.apply = APPLY_FILT_CONST;
+			set_left("lmdb", "tt4edge", "bl1");
+			strcpy(q_state.url, "const-filter");
+			BAPI.debug_trigger_failure = TRIGGER_FAIL_NEW_STRING_BLOCK;
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_ERROR_WRONG_ARGUMENTS);
+			BAPI.debug_trigger_failure = 0;
+			REQUIRE(p_txn == nullptr);
+
+			clear_state();
+			q_state.apply = APPLY_FILT_CONST;
+			set_left("lmdb", "tt4edge", "bl1");
+			strcpy(q_state.url, "const-filter");
+			{
+				pTransaction p_aux = nullptr;
+				REQUIRE(BAPI.block_from_const(p_aux, q_state.url));
+				memcpy(&loc, &q_state.base, SIZE_OF_BASE_ENT_KEY);
+				expected_ret = p_lmdb->get(p_expected, loc, p_aux->p_block);
+				expected_ret = expected_ret == SERVICE_NO_ERROR ? SERVICE_NO_ERROR : SERVICE_ERROR_IO_ERROR;
+				destroy_if_any(p_expected);
+				destroy_if_any(p_aux);
+			}
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == expected_ret);
+			destroy_if_any(p_txn);
+
+			clear_state();
+			q_state.apply = APPLY_RAW;
+			set_left("lmdb", "tt4edge", "missing");
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_ERROR_BLOCK_NOT_FOUND);
+			REQUIRE(p_txn == nullptr);
+
+			clear_state();
+			q_state.apply = APPLY_RAW;
+			set_left("lmdb", "tt4edge", "bl1");
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
+			destroy_if_any(p_txn);
+
+			clear_state();
+			q_state.apply = APPLY_TEXT;
+			set_left("lmdb", "tt4edge", "missing");
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_ERROR_BLOCK_NOT_FOUND);
+			REQUIRE(p_txn == nullptr);
+
+			clear_state();
+			q_state.apply = APPLY_TEXT;
+			set_left("lmdb", "tt4edge", "bl1");
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_NO_ERROR);
+			destroy_if_any(p_txn);
+		}
+
+			WHEN("We call get_right_remote() directly with handcrafted edge inputs") {
+				pTransaction p_expected = nullptr;
+				StatusCode expected_ret;
+
+				clear_state();
+				strcpy(q_state.r_node, "missing-node");
+				set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+				q_state.apply = APPLY_ASSIGN_NOTHING;
+				expected_ret = CHN.forward_get(p_expected, q_state.r_node, (pChar) "//lmdb/tt4edge/bl1");
+				REQUIRE(BAPI.get_right_remote(p_txn, q_state) == expected_ret);
+				destroy_if_any(p_expected);
+				destroy_if_any(p_txn);
+
+				clear_state();
+				strcpy(q_state.r_node, "missing-node");
+				set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+				strcpy(q_state.name, "field");
+				q_state.apply = APPLY_ASSIGN_NAME;
+				expected_ret = CHN.forward_get(p_expected, q_state.r_node, (pChar) "//lmdb/tt4edge/bl1:field");
+				REQUIRE(BAPI.get_right_remote(p_txn, q_state) == expected_ret);
+				destroy_if_any(p_expected);
+				destroy_if_any(p_txn);
+
+				clear_state();
+				strcpy(q_state.r_node, "missing-node");
+				set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+				strcpy(q_state.url, "k=v");
+				q_state.apply = APPLY_ASSIGN_URL;
+				expected_ret = CHN.forward_get(p_expected, q_state.r_node, (pChar) "//lmdb&k=v;");
+				REQUIRE(BAPI.get_right_remote(p_txn, q_state) == expected_ret);
+				destroy_if_any(p_expected);
+				destroy_if_any(p_txn);
+
+				clear_state();
+				strcpy(q_state.r_node, "missing-node");
+				set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+				set_loc(q_state.rr_value, "lmdb", "tt4edge", "filter");
+				q_state.apply = APPLY_ASSIGN_FUNCTION;
+				expected_ret = CHN.forward_get(p_expected, q_state.r_node, (pChar) "//lmdb/tt4edge/bl1(//lmdb/tt4edge/filter)");
+				REQUIRE(BAPI.get_right_remote(p_txn, q_state) == expected_ret);
+				destroy_if_any(p_expected);
+				destroy_if_any(p_txn);
+
+				clear_state();
+				strcpy(q_state.r_node, "missing-node");
+				set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+				strcpy(q_state.url, "const");
+				q_state.apply = APPLY_ASSIGN_FUNCT_CONST;
+				expected_ret = CHN.forward_get(p_expected, q_state.r_node, (pChar) "//lmdb/tt4edge/bl1(&const)");
+				REQUIRE(BAPI.get_right_remote(p_txn, q_state) == expected_ret);
+				destroy_if_any(p_expected);
+				destroy_if_any(p_txn);
+
+				clear_state();
+				strcpy(q_state.r_node, "missing-node");
+				set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+				set_loc(q_state.rr_value, "lmdb", "tt4edge", "filter");
+				q_state.apply = APPLY_ASSIGN_FILTER;
+				expected_ret = CHN.forward_get(p_expected, q_state.r_node, (pChar) "//lmdb/tt4edge/bl1[//lmdb/tt4edge/filter]");
+				REQUIRE(BAPI.get_right_remote(p_txn, q_state) == expected_ret);
+				destroy_if_any(p_expected);
+				destroy_if_any(p_txn);
+
+				clear_state();
+				strcpy(q_state.r_node, "missing-node");
+				set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+				strcpy(q_state.url, "const");
+				q_state.apply = APPLY_ASSIGN_FILT_CONST;
+				expected_ret = CHN.forward_get(p_expected, q_state.r_node, (pChar) "//lmdb/tt4edge/bl1[&const]");
+				REQUIRE(BAPI.get_right_remote(p_txn, q_state) == expected_ret);
+				destroy_if_any(p_expected);
+				destroy_if_any(p_txn);
+
+				clear_state();
+				strcpy(q_state.r_node, "missing-node");
+				set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+				q_state.apply = APPLY_ASSIGN_RAW;
+				expected_ret = CHN.forward_get(p_expected, q_state.r_node, (pChar) "//lmdb/tt4edge/bl1.raw");
+				REQUIRE(BAPI.get_right_remote(p_txn, q_state) == expected_ret);
+				destroy_if_any(p_expected);
+				destroy_if_any(p_txn);
+
+				clear_state();
+				strcpy(q_state.r_node, "missing-node");
+				set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+				q_state.apply = APPLY_ASSIGN_TEXT;
+				expected_ret = CHN.forward_get(p_expected, q_state.r_node, (pChar) "//lmdb/tt4edge/bl1.text");
+				REQUIRE(BAPI.get_right_remote(p_txn, q_state) == expected_ret);
+				destroy_if_any(p_expected);
+				destroy_if_any(p_txn);
+
+				clear_state();
+				q_state.apply = APPLY_JAZZ_INFO;
+				REQUIRE(BAPI.get_right_remote(p_txn, q_state) == SERVICE_ERROR_WRONG_ARGUMENTS);
+				REQUIRE(p_txn == nullptr);
+			}
+
+			REQUIRE(BAPI.parse(prep_state, (pChar) "//lmdb/tt4edge", BASE_API_DELETE));
+			REQUIRE(BAPI.remove(prep_state) == SERVICE_NO_ERROR);
+		}
+
+	REQUIRE(BAPI.shut_down() == 0);
+
+	REQUIRE(CHN.shut_down() == 0);
+	REQUIRE(VOL.shut_down() == 0);
+	REQUIRE(PER.shut_down() == 0);
+}
+
+
 SCENARIO("Testing BaseAPI: header(), get(), put(), delete()") {
 
 	GIVEN("The instances are constructed, but not yet started") {
