@@ -32,7 +32,7 @@
 */
 
 
-#include "src/jazz_models/concept.h"
+#include "src/jazz_models/data_space.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2

@@ -45,8 +45,8 @@ This is the parent abstract model, the models manager and the API. Actual models
 */
 
 
-#include "src/jazz_models/data_space.h"
 #include "src/jazz_models/concept.h"
+#include "src/jazz_models/data_space.h"
 #include "src/jazz_models/sem_space.h"
 #include "src/jazz_models/model.h"
 #include "src/jazz_models/models_api.h"
