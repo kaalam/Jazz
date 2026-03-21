@@ -95,7 +95,7 @@ OpCodes::OpCodes(pLogger a_logger, pConfigFile a_config) : Service(a_logger, a_c
 
 StatusCode OpCodes::start() {
 	if (!get_conf_key("ONNX_IR_VERSION", ir_vers)) {
-		log(LOG_ERROR, "Config key ONNX_IR_VERSION not valid in OpCodes::start");
+		log(log_error_level, "Config key ONNX_IR_VERSION not valid in OpCodes::start");
 
 		return SERVICE_ERROR_BAD_CONFIG;
 	}
@@ -103,19 +103,19 @@ StatusCode OpCodes::start() {
 	String s;
 
 	if (!get_conf_key("ONNX_OPCODE_DEFS_FN", s)) {
-		log(LOG_ERROR, "Config key ONNX_OPCODE_DEFS_FN not found in OpCodes::start");
+		log(log_error_level, "Config key ONNX_OPCODE_DEFS_FN not found in OpCodes::start");
 
 		return SERVICE_ERROR_BAD_CONFIG;
 	}
 
 	if (!onnx_conf.load_config(s.c_str())) {
-		log_printf(LOG_ERROR, "Failed reading configuration file '%s' in OpCodes::start", s.c_str());
+		log_printf(log_error_level, "Failed reading configuration file '%s' in OpCodes::start", s.c_str());
 
 		return SERVICE_ERROR_IO_ERROR;
 	}
 
 	if (!build_opcode_dict()) {
-		log(LOG_ERROR, "Failed building opcode dictionary in OpCodes::start");
+		log(log_error_level, "Failed building opcode dictionary in OpCodes::start");
 
 		return SERVICE_ERROR_IO_ERROR;
 	}

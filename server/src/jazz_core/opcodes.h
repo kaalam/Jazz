@@ -254,6 +254,7 @@ class OpCodes : public Service {
 		int op_vers_current = 0;						///< The opset version in use, set by set_opset_version() or op_vers_latest.
 		OnnxOpCodeDict opcodes_idx = {};				///< The index to the opcodes.
 		OnnxOpCodes	opcodes = {};						///< The opcodes parsed as binary objects.
+		int log_error_level = LOG_ERROR;				///< The log level to silence it in tests
 };
 typedef OpCodes *pOpCodes;		///< A pointer to an OpCodes object
 
