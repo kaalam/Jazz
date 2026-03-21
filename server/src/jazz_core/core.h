@@ -48,10 +48,6 @@
 #define INCLUDED_JAZZ_BEBOP_CORE
 
 
-//TODO: Design Compiler relations with the services it owns, especially Fields/Snippets and how Core uses it.
-//TODO: Design Core how it connects to API and uses everything else.
-
-
 /** \brief Core: The execution unit is now a wrapper around onnx-runtime.
 
 A core is not a service, it is stored in a Bop API.
