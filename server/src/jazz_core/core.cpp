@@ -83,8 +83,7 @@ StatusCode Core::start() {
 
 	int ret = BaseAPI::start();	// This initializes the one-shot functionality.
 
-	if (ret != SERVICE_NO_ERROR)
-		return ret;
+	if (ret != SERVICE_NO_ERROR) return ret;
 
 //TODO: Implement Core::start()
 

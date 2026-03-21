@@ -44,15 +44,59 @@ using namespace jazz_core;
 // Tests
 // -----
 
-SCENARIO("Testing core") {
+SCENARIO("Testing core: lifecycle and unimplemented methods") {
+	REQUIRE(COR.id() != nullptr);
+	REQUIRE(strcmp(COR.id(), "Core from Jazz-" JAZZ_VERSION) == 0);
 
-//TODO: Write tests for core.
+	REQUIRE(COR.start() == 0);
 
-	GIVEN("Something") {
-		WHEN("someone looks at it") {
-			THEN("it breaks") {
-				REQUIRE(2 > 1);
-			}
-		}
-	}
+	char where_str[] = "//onnx/entity/key";
+	char name_str[]  = "item";
+
+	Locator where = {};
+	Locator what = {};
+	Locator function = {};
+
+	strcpy(where.base, "onnx");
+	strcpy(where.entity, "entity");
+	strcpy(where.key, "key");
+
+	strcpy(what.base, "onnx");
+	strcpy(what.entity, "entity");
+	strcpy(what.key, "key");
+
+	strcpy(function.base, "onnx");
+	strcpy(function.entity, "entity");
+	strcpy(function.key, "run");
+
+	StaticBlockHeader hea = {};
+	pTransaction p_txn = nullptr;
+	pBlock p_block = nullptr;
+	pTuple p_args = nullptr;
+
+	REQUIRE(COR.new_entity(where_str) == SERVICE_NOT_IMPLEMENTED);
+	REQUIRE(COR.new_entity(where) == SERVICE_NOT_IMPLEMENTED);
+
+	REQUIRE(COR.put(where_str, p_block, WRITE_AS_BASE_DEFAULT) == SERVICE_NOT_IMPLEMENTED);
+	REQUIRE(COR.put(where, p_block, WRITE_AS_BASE_DEFAULT) == SERVICE_NOT_IMPLEMENTED);
+
+	REQUIRE(COR.remove(where_str) == SERVICE_NOT_IMPLEMENTED);
+	REQUIRE(COR.remove(where) == SERVICE_NOT_IMPLEMENTED);
+
+	REQUIRE(COR.header(hea, where_str) == SERVICE_NOT_IMPLEMENTED);
+	REQUIRE(COR.header(p_txn, where_str) == SERVICE_NOT_IMPLEMENTED);
+	REQUIRE(COR.header(hea, what) == SERVICE_NOT_IMPLEMENTED);
+	REQUIRE(COR.header(p_txn, what) == SERVICE_NOT_IMPLEMENTED);
+
+	REQUIRE(COR.get(p_txn, where_str) == SERVICE_NOT_IMPLEMENTED);
+	REQUIRE(COR.get(p_txn, where_str, p_block) == SERVICE_NOT_IMPLEMENTED);
+	REQUIRE(COR.get(p_txn, where_str, name_str) == SERVICE_NOT_IMPLEMENTED);
+	REQUIRE(COR.get(p_txn, what) == SERVICE_NOT_IMPLEMENTED);
+	REQUIRE(COR.get(p_txn, what, p_block) == SERVICE_NOT_IMPLEMENTED);
+	REQUIRE(COR.get(p_txn, what, name_str) == SERVICE_NOT_IMPLEMENTED);
+
+	REQUIRE(COR.exec(p_txn, function, p_args) == SERVICE_NOT_IMPLEMENTED);
+	REQUIRE(COR.modify(function, p_args) == SERVICE_NOT_IMPLEMENTED);
+
+	REQUIRE(COR.shut_down() == 0);
 }
