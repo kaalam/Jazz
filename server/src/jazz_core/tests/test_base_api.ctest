@@ -3217,6 +3217,333 @@ SCENARIO("Testing BaseAPI: header(), get(), put(), delete()") {
 }
 
 
+SCENARIO("Coverage-focused BaseAPI.get()/put() branches without starting Channels") {
+
+	REQUIRE(BAPI.shut_down() == 0);
+	REQUIRE(PER.shut_down() == 0);
+
+	REQUIRE(PER.start() == 0);
+	REQUIRE(BAPI.start() == 0);
+
+	ApiQueryState prep_state;
+	pTransaction	 prep_txn = (pTransaction) &prep_state;
+
+	REQUIRE(BAPI.parse(prep_state, (pChar) "//lmdb/tt_cov_get_put.new", BASE_API_GET));
+	REQUIRE(BAPI.get(prep_txn, prep_state) == SERVICE_NO_ERROR);
+	REQUIRE(prep_txn == nullptr);
+
+	prep_txn = (pTransaction) &prep_state;
+	REQUIRE(BAPI.parse(prep_state, (pChar) "//lmdb/tt_cov_get_put/src=&[1,2,3];", BASE_API_GET));
+	REQUIRE(BAPI.get(prep_txn, prep_state) == SERVICE_NO_ERROR);
+	REQUIRE(prep_txn == nullptr);
+
+	auto clear_state = [&](ApiQueryState &st) {
+		memset(&st, 0, sizeof(st));
+	};
+
+	auto set_left = [&](ApiQueryState &st, const char *key) {
+		strcpy(st.base, "lmdb");
+		strcpy(st.entity, "tt_cov_get_put");
+		strcpy(st.key, key);
+	};
+
+	auto set_right_src = [&](ApiQueryState &st) {
+		strcpy(st.r_value.base, "lmdb");
+		strcpy(st.r_value.entity, "tt_cov_get_put");
+		strcpy(st.r_value.key, "src");
+	};
+
+	GIVEN("We exercise uncovered get() branches directly") {
+		ApiQueryState what;
+		pTransaction	 p_txn = nullptr;
+		StatusCode	 ret;
+
+		clear_state(what);
+		what.apply = APPLY_NOTHING;
+		strcpy(what.l_node, "missing_node");
+		strcpy(what.url, "//lmdb/tt_cov_get_put/src");
+		ret = BAPI.get(p_txn, what);
+		CHECK(ret != SERVICE_NO_ERROR);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_ASSIGN_NOTHING;
+		set_left(what, "dst_remote_right");
+		set_right_src(what);
+		strcpy(what.r_node, "missing_node");
+		ret = BAPI.get(p_txn, what);
+		CHECK(ret != SERVICE_NO_ERROR);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_ASSIGN_NOTHING;
+		set_left(what, "dst_local");
+		set_right_src(what);
+		ret = BAPI.get(p_txn, what);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_ASSIGN_NOTHING;
+		set_left(what, "dst_forward");
+		set_right_src(what);
+		strcpy(what.l_node, "missing_node");
+		ret = BAPI.get(p_txn, what);
+		CHECK(ret != SERVICE_NO_ERROR);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_ASSIGN_CONST;
+		set_left(what, "dst_assign_const_remote");
+		strcpy(what.l_node, "missing_node");
+		strcpy(what.url, "[9,8]");
+		ret = BAPI.get(p_txn, what);
+		CHECK(ret != SERVICE_NO_ERROR);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_ASSIGN_CONST;
+		set_left(what, "dst_assign_const_local");
+		strcpy(what.url, "[7,6]");
+		ret = BAPI.get(p_txn, what);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_ASSIGN_CONST;
+		set_left(what, "dst_assign_const_fail");
+		strcpy(what.url, "[5,4]");
+		BAPI.debug_trigger_failure = TRIGGER_FAIL_NEW_STRING_BLOCK;
+		ret = BAPI.get(p_txn, what);
+		BAPI.debug_trigger_failure = 0;
+		CHECK(ret == SERVICE_ERROR_WRONG_ARGUMENTS);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_NEW_ENTITY;
+		strcpy(what.l_node, "missing_node");
+		strcpy(what.url, "//lmdb/tt_cov_get_put_remote.new");
+		ret = BAPI.get(p_txn, what);
+		CHECK(ret != SERVICE_NO_ERROR);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_NEW_ENTITY;
+		strcpy(what.base, "lmdb");
+		strcpy(what.url, "//lmdb/tt_cov_get_put_url");
+		ret = BAPI.get(p_txn, what);
+		CHECK(ret != SERVICE_ERROR_WRONG_BASE);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_NEW_ENTITY;
+		strcpy(what.base, "no_base");
+		ret = BAPI.get(p_txn, what);
+		CHECK(ret == SERVICE_ERROR_WRONG_BASE);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_GET_ATTRIBUTE;
+		strcpy(what.l_node, "missing_node");
+		strcpy(what.url, "//lmdb/tt_cov_get_put/src.attribute(1)");
+		ret = BAPI.get(p_txn, what);
+		CHECK(ret != SERVICE_NO_ERROR);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_GET_ATTRIBUTE;
+		set_left(what, "src");
+		ret = BAPI.get(p_txn, what);
+		if (ret == SERVICE_NO_ERROR)
+			p_txn->p_owner->destroy_transaction(p_txn);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_GET_ATTRIBUTE;
+		strcpy(what.base, "no_base");
+		strcpy(what.entity, "tt_cov_get_put");
+		strcpy(what.key, "src");
+		ret = BAPI.get(p_txn, what);
+		CHECK(ret == SERVICE_ERROR_WRONG_BASE);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_SET_ATTRIBUTE;
+		strcpy(what.l_node, "missing_node");
+		strcpy(what.url, "//lmdb/tt_cov_get_put/src.attribute(1)=&text/plain;");
+		ret = BAPI.get(p_txn, what);
+		CHECK(ret != SERVICE_NO_ERROR);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_SET_ATTRIBUTE;
+		set_left(what, "src");
+		what.r_value.attribute = 1;
+		strcpy(what.url, "text/plain");
+		ret = BAPI.get(p_txn, what);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_SET_ATTRIBUTE;
+		strcpy(what.base, "no_base");
+		strcpy(what.entity, "tt_cov_get_put");
+		strcpy(what.key, "src");
+		what.r_value.attribute = 1;
+		strcpy(what.url, "text/plain");
+		ret = BAPI.get(p_txn, what);
+		CHECK(ret == SERVICE_ERROR_WRONG_BASE);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_SET_ATTRIBUTE;
+		set_left(what, "missing_key");
+		what.r_value.attribute = 1;
+		strcpy(what.url, "text/plain");
+		ret = BAPI.get(p_txn, what);
+		CHECK(ret == SERVICE_ERROR_BLOCK_NOT_FOUND);
+		CHECK(p_txn == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_SET_ATTRIBUTE;
+		set_left(what, "src");
+		what.r_value.attribute = 1;
+		strcpy(what.url, "text/plain");
+		BAPI.debug_trigger_failure = TRIGGER_FAIL_FILL_TENSOR;
+		ret = BAPI.get(p_txn, what);
+		BAPI.debug_trigger_failure = 0;
+		CHECK((ret == SERVICE_NO_ERROR || ret == SERVICE_ERROR_IO_ERROR || ret == SERVICE_ERROR_NEW_BLOCK_ARGS));
+		CHECK(p_txn == nullptr);
+
+		std::vector<pTransaction> held_txn;
+		pTransaction p_hold = nullptr;
+		while (BAPI.new_transaction(p_hold) == SERVICE_NO_ERROR)
+			held_txn.push_back(p_hold);
+		CHECK(p_hold == nullptr);
+
+		clear_state(what);
+		what.apply = APPLY_SET_ATTRIBUTE;
+		set_left(what, "src");
+		what.r_value.attribute = 1;
+		strcpy(what.url, "text/plain");
+		ret = BAPI.get(p_txn, what);
+		CHECK((ret == SERVICE_ERROR_NO_MEM || ret == SERVICE_ERROR_IO_ERROR || ret == SERVICE_ERROR_NEW_BLOCK_ARGS));
+		CHECK(p_txn == nullptr);
+
+		for (pTransaction &p_free_txn : held_txn)
+			BAPI.destroy_transaction(p_free_txn);
+	}
+
+	GIVEN("We exercise uncovered put() branches directly") {
+		ApiQueryState get_src;
+		pTransaction	 p_src = nullptr;
+
+		REQUIRE(BAPI.parse(get_src, (pChar) "//lmdb/tt_cov_get_put/src", BASE_API_GET));
+		REQUIRE(BAPI.get(p_src, get_src) == SERVICE_NO_ERROR);
+		REQUIRE(p_src != nullptr);
+
+		int dim[2] = {4, 0};
+		pTransaction p_plain = nullptr;
+		REQUIRE(BAPI.new_block(p_plain, CELL_TYPE_BYTE, &dim[0], FILL_NEW_WITH_ZERO) == SERVICE_NO_ERROR);
+		REQUIRE(p_plain != nullptr);
+
+		pTransaction p_undef = nullptr;
+		int ret_new_undef = BAPI.new_block(p_undef, CELL_TYPE_UNDEFINED, &dim[0], FILL_NEW_WITH_ZERO);
+		CHECK((ret_new_undef == SERVICE_NO_ERROR || ret_new_undef == SERVICE_ERROR_NEW_BLOCK_ARGS));
+
+		pTransaction p_const = nullptr;
+		REQUIRE(BAPI.block_from_const(p_const, (pChar) "[1,2,3]"));
+		REQUIRE(p_const != nullptr);
+
+		ApiQueryState where;
+		StatusCode	 ret;
+
+		clear_state(where);
+		where.apply = APPLY_NOTHING;
+		strcpy(where.l_node, "missing_node");
+		strcpy(where.url, "//lmdb/tt_cov_get_put/remote_put");
+		ret = BAPI.put(where, p_src->p_block);
+		CHECK(ret != SERVICE_NO_ERROR);
+
+		clear_state(where);
+		where.apply = APPLY_NOTHING;
+		strcpy(where.base, "no_base");
+		strcpy(where.entity, "tt_cov_get_put");
+		strcpy(where.key, "x");
+		CHECK(BAPI.put(where, p_src->p_block) == SERVICE_ERROR_WRONG_BASE);
+
+		clear_state(where);
+		where.apply = APPLY_NOTHING;
+		set_left(where, "put_nothing");
+		ret = BAPI.put(where, p_src->p_block);
+		CHECK(ret == SERVICE_NO_ERROR);
+
+		clear_state(where);
+		where.apply = APPLY_RAW;
+		set_left(where, "put_raw_ok");
+		ret = BAPI.put(where, p_const->p_block);
+		CHECK((ret == SERVICE_NO_ERROR || ret == SERVICE_ERROR_IO_ERROR || ret == SERVICE_ERROR_NEW_BLOCK_ARGS));
+
+		if (p_undef != nullptr) {
+			clear_state(where);
+			where.apply = APPLY_RAW;
+			set_left(where, "put_raw_undef");
+			ret = BAPI.put(where, p_undef->p_block);
+			CHECK((ret == SERVICE_NO_ERROR || ret == SERVICE_ERROR_IO_ERROR || ret == SERVICE_ERROR_NEW_BLOCK_ARGS));
+		}
+
+		clear_state(where);
+		where.apply = APPLY_RAW;
+		set_left(where, "put_raw");
+		ret = BAPI.put(where, p_src->p_block);
+		CHECK((ret == SERVICE_NO_ERROR || ret == SERVICE_ERROR_IO_ERROR || ret == SERVICE_ERROR_NEW_BLOCK_ARGS));
+
+		clear_state(where);
+		where.apply = APPLY_TEXT;
+		set_left(where, "put_text_fail");
+		BAPI.debug_trigger_failure = TRIGGER_FAIL_NEW_STRING_BLOCK;
+		ret = BAPI.put(where, p_plain->p_block);
+		BAPI.debug_trigger_failure = 0;
+		CHECK(ret != SERVICE_NO_ERROR);
+
+		clear_state(where);
+		where.apply = APPLY_TEXT;
+		set_left(where, "put_text");
+		ret = BAPI.put(where, p_plain->p_block);
+		CHECK((ret == SERVICE_NO_ERROR || ret == SERVICE_ERROR_IO_ERROR));
+
+		clear_state(where);
+		where.apply = APPLY_URL;
+		strcpy(where.base, "lmdb");
+		strcpy(where.url, "//lmdb/tt_cov_get_put/put_url");
+		ret = BAPI.put(where, p_plain->p_block);
+		CHECK(ret == SERVICE_NO_ERROR);
+
+		clear_state(where);
+		where.apply = APPLY_JAZZ_INFO;
+		set_left(where, "put_wrong");
+		CHECK(BAPI.put(where, p_src->p_block) == SERVICE_ERROR_WRONG_ARGUMENTS);
+
+		p_const->p_owner->destroy_transaction(p_const);
+		REQUIRE(p_const == nullptr);
+
+		p_plain->p_owner->destroy_transaction(p_plain);
+		REQUIRE(p_plain == nullptr);
+
+		if (p_undef != nullptr) {
+			p_undef->p_owner->destroy_transaction(p_undef);
+			REQUIRE(p_undef == nullptr);
+		}
+
+		p_src->p_owner->destroy_transaction(p_src);
+		REQUIRE(p_src == nullptr);
+	}
+
+	REQUIRE(BAPI.parse(prep_state, (pChar) "//lmdb/tt_cov_get_put", BASE_API_DELETE));
+	REQUIRE(BAPI.remove(prep_state) == SERVICE_NO_ERROR);
+
+	REQUIRE(BAPI.shut_down() == 0);
+	REQUIRE(PER.shut_down() == 0);
+}
+
+
 SCENARIO("Testing BaseAPI struct sizes and positions") {
 
 	REQUIRE(sizeof(ApiQueryState) == 2048);
