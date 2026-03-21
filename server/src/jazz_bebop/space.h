@@ -73,7 +73,6 @@ class Space : public Tuple {
 
 };
 
-//TODO: Clarify why space is a Service. Spoiler: It is not!
 //TODO: Clarify how spaces build a tree.
 //TODO: Clarify why we need singular/plural like collections of, because we want to have just one service for all the spaces at a level.
 //TODO: Think that in Bop, a space is something that accepts then [] and the '.' the latter being just a property of what is on its left:
@@ -88,7 +87,7 @@ class Space : public Tuple {
 	- An abstraction in the form of rows and columns.
 	- A mechanism to load and update its own metadata in a persisted way.
 
-	Through inheritance, it provides su things as:
+	Through inheritance, it provides such things as:
 
 	- Sharding and replication across a cluster.
 	- A mechanism to load, update, invalidate blocks. This supports continuous update like in time series.
