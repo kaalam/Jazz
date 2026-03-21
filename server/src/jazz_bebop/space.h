@@ -52,6 +52,7 @@ namespace jazz_bebop
 {
 
 using namespace jazz_elements;
+using namespace jazz_core;
 
 typedef uint64_t RowNumber;		///< A row number in a Space
 typedef Name	 ColumnName;	///< A column name in a Space

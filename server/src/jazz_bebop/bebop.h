@@ -32,7 +32,7 @@
 */
 
 
-#include "src/jazz_bebop/casters.h"
+#include "src/jazz_bebop/namespace.h"
 
 #if defined CATCH_TEST
 #ifndef INCLUDED_JAZZ_CATCH2

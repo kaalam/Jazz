@@ -50,8 +50,6 @@ sets the groundwork for jazz_models.
 
 #include "src/jazz_bebop/space.h"
 #include "src/jazz_bebop/namespace.h"
-#include "src/jazz_bebop/objects.h"
-#include "src/jazz_bebop/casters.h"
 #include "src/jazz_bebop/bebop.h"
 
 
