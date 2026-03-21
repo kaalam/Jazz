@@ -629,7 +629,7 @@ class Container : public Service {
 		pTransaction p_free;				///< The free list of transactions
 		bool alloc_warning_issued;			///< True if a warning was issued for over-allocation
 		Lock32 _lock_;						///< A lock for the deque of transactions
-		int log_error_level = LOG_ERROR;	///< The log level for LMDB errors made a variable to silence it in tests
+		int log_error_level = LOG_ERROR;	///< The log level for Container and LMDB errors made a variable to silence it in tests
 
 #ifndef CATCH_TEST
 	private:
