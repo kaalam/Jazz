@@ -46,13 +46,62 @@ using namespace jazz_models;
 
 SCENARIO("Testing models_api") {
 
-//TODO: Write tests for ModelsAPI.
-
-	GIVEN("Something") {
-		WHEN("someone looks at it") {
-			THEN("it breaks") {
-				REQUIRE(2 > 1);
-			}
-		}
+	GIVEN("The instances are constructed, but not yet started") {
+		REQUIRE(MDL.p_channels	== &CHN);
+		REQUIRE(MDL.p_volatile	== &VOL);
+		REQUIRE(MDL.p_persisted == &PER);
+		REQUIRE(MDL.p_core		== &COR);
+		REQUIRE(MDL.p_bebop		== &BOP);
 	}
+
+	REQUIRE(CHN.start()	== 0);
+	REQUIRE(VOL.start()	== 0);
+	REQUIRE(PER.start() == 0);
+	REQUIRE(COR.start() == 0);
+	REQUIRE(BOP.start() == 0);
+
+	REQUIRE(MDL.start() == 0);
+
+	pChar pID = MDL.id();
+	REQUIRE(strlen(pID) > 7);
+	REQUIRE(pID[0] == 'M');
+
+	ApiQueryState q_state = {};
+	pTransaction p_txn;
+
+	REQUIRE(MDL.get(p_txn, q_state) == SERVICE_NOT_IMPLEMENTED);
+
+	GIVEN("The instances are started") {
+		REQUIRE(MDL.base_server[TenBitsAtAddress("bash")]	 == &CHN);
+		REQUIRE(MDL.base_server[TenBitsAtAddress("file")]	 == &CHN);
+		REQUIRE(MDL.base_server[TenBitsAtAddress("http")]	 == &CHN);
+		REQUIRE(MDL.base_server[TenBitsAtAddress("0-mq")]	 == &CHN);
+
+		REQUIRE(MDL.base_server[TenBitsAtAddress("deque")]	 == &VOL);
+		REQUIRE(MDL.base_server[TenBitsAtAddress("index")]	 == &VOL);
+		REQUIRE(MDL.base_server[TenBitsAtAddress("queue")]	 == &VOL);
+		REQUIRE(MDL.base_server[TenBitsAtAddress("tree")]	 == &VOL);
+
+		REQUIRE(MDL.base_server[TenBitsAtAddress("lmdb")]	 == &PER);
+
+		REQUIRE(MDL.base_server[TenBitsAtAddress("runtime")] == &COR);
+		REQUIRE(MDL.base_server[TenBitsAtAddress("onnx")]	 == &COR);
+
+		REQUIRE(MDL.base_server[TenBitsAtAddress("bop")]	 == &BOP);
+		REQUIRE(MDL.base_server[TenBitsAtAddress("bebop")]	 == &BOP);
+		REQUIRE(MDL.base_server[TenBitsAtAddress("compile")] == &BOP);
+
+		REQUIRE(MDL.base_server[TenBitsAtAddress("resolve")] == nullptr);
+		REQUIRE(MDL.base_server[TenBitsAtAddress("brane")]	 == nullptr);
+
+		REQUIRE(MDL.base_server[TenBitsAtAddress("zqt")]	 == nullptr);
+	}
+
+	REQUIRE(MDL.shut_down() == 0);
+
+	REQUIRE(CHN.shut_down() == 0);
+	REQUIRE(VOL.shut_down() == 0);
+	REQUIRE(PER.shut_down() == 0);
+	REQUIRE(COR.shut_down() == 0);
+	REQUIRE(BOP.shut_down() == 0);
 }
