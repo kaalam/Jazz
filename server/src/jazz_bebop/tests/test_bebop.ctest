@@ -46,13 +46,54 @@ using namespace jazz_bebop;
 
 SCENARIO("Testing bop") {
 
-//TODO: Write tests for bop.
-
-	GIVEN("Something") {
-		WHEN("someone looks at it") {
-			THEN("it breaks") {
-				REQUIRE(2 > 1);
-			}
-		}
+	GIVEN("The instances are constructed, but not yet started") {
+		REQUIRE(BOP.p_channels	== &CHN);
+		REQUIRE(BOP.p_volatile	== &VOL);
+		REQUIRE(BOP.p_persisted == &PER);
+		REQUIRE(BOP.p_core		== &COR);
 	}
+
+	REQUIRE(CHN.start()	== 0);
+	REQUIRE(VOL.start()	== 0);
+	REQUIRE(PER.start() == 0);
+	REQUIRE(COR.start() == 0);
+
+	REQUIRE(BOP.start() == 0);
+
+	pChar pID = BOP.id();
+	REQUIRE(strlen(pID) > 7);
+	REQUIRE(pID[0] == 'B');
+
+	GIVEN("The instances are started") {
+		REQUIRE(BOP.base_server[TenBitsAtAddress("bash")]	 == &CHN);
+		REQUIRE(BOP.base_server[TenBitsAtAddress("file")]	 == &CHN);
+		REQUIRE(BOP.base_server[TenBitsAtAddress("http")]	 == &CHN);
+		REQUIRE(BOP.base_server[TenBitsAtAddress("0-mq")]	 == &CHN);
+
+		REQUIRE(BOP.base_server[TenBitsAtAddress("deque")]	 == &VOL);
+		REQUIRE(BOP.base_server[TenBitsAtAddress("index")]	 == &VOL);
+		REQUIRE(BOP.base_server[TenBitsAtAddress("queue")]	 == &VOL);
+		REQUIRE(BOP.base_server[TenBitsAtAddress("tree")]	 == &VOL);
+
+		REQUIRE(BOP.base_server[TenBitsAtAddress("lmdb")]	 == &PER);
+
+		REQUIRE(BOP.base_server[TenBitsAtAddress("runtime")] == &COR);
+		REQUIRE(BOP.base_server[TenBitsAtAddress("onnx")]	 == &COR);
+
+		REQUIRE(BOP.base_server[TenBitsAtAddress("bop")]	 == nullptr);
+		REQUIRE(BOP.base_server[TenBitsAtAddress("bebop")]	 == nullptr);
+		REQUIRE(BOP.base_server[TenBitsAtAddress("compile")] == nullptr);
+
+		REQUIRE(BOP.base_server[TenBitsAtAddress("resolve")] == nullptr);
+		REQUIRE(BOP.base_server[TenBitsAtAddress("brane")]	 == nullptr);
+
+		REQUIRE(BOP.base_server[TenBitsAtAddress("zqt")]	 == nullptr);
+	}
+
+	REQUIRE(BOP.shut_down() == 0);
+
+	REQUIRE(CHN.shut_down() == 0);
+	REQUIRE(VOL.shut_down() == 0);
+	REQUIRE(PER.shut_down() == 0);
+	REQUIRE(COR.shut_down() == 0);
 }
