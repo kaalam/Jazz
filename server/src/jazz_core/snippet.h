@@ -48,10 +48,13 @@
 #define INCLUDED_JAZZ_BEBOP_SNIPPET
 
 
-/** \brief A Concept ancestor that contains both the source and the object code
+/** \brief A tuple containing: obj (the onnx object), links (how data is possibly stored) and asm (a source in onnx opcodes).
 
-A Snippet is an object that can do both forward (compile) and reverse engineering (decompile) between compilable Bop and an onnx file.
-It supports a number of serializations to and from Jazz Blocks. It forms the minimal unit of what can be run.
+//TODO: Refactor 1: Snippet: A tuple containing: obj, links and asm.
+//TODO: Refactor 2: Snippet has constructors, Unlike Tuple they can resize with the help of a pBaseAPI
+// 	- pBaseAPI: Creates an empty Snippet
+// 	- pBaseAPI + obj: Creates from an onnx object
+// 	- pBaseAPI + links + asm: Creates from source
 
 */
 
