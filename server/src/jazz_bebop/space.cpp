@@ -38,7 +38,19 @@
 namespace jazz_bebop
 {
 
-using namespace jazz_elements;
+/*	-----------------------------------------------
+	 Space : I m p l e m e n t a t i o n
+--------------------------------------------------- */
+
+Space::Space(pBaseAPI p_owner) {
+//TODO: Implement constructor.
+}
+
+
+Space::~Space() {
+//TODO: Implement destructor.
+}
+
 
 } // namespace jazz_bebop
 

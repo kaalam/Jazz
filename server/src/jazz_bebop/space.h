@@ -54,50 +54,35 @@ namespace jazz_bebop
 using namespace jazz_elements;
 using namespace jazz_core;
 
-typedef uint64_t RowNumber;		///< A row number in a Space
-typedef Name	 ColumnName;	///< A column name in a Space
-
-#define SPACE_NOT_A_ROW				0xffffFFFFffffFFFE	///< A row number that is not valid used for initialization.
-#define SPACE_ROW_STOP_ITERATOR		0xffffFFFFffffFFFF	///< A row number returned by the iterator when it is done.
-
 
 class Space;					///< Forward definition of Space
 typedef Space *pSpace;			///< A pointer to a Space
 
 
-class Space : public Tuple {
+/** \brief Space: The Bebop object that belongs to a hierarchy.
+
+Space: Extends Snippet with:
+
+    - A parent defining a hierarchical structure
+    - An address (a locator)
+    - A kind
+    - Casting mechanisms across kinds
+    - operators: is (=), get (<-), key (.), inside ({..}), within ([..]), call ((..)) and after (|>)
+    - properties: keys (a dictionary to children and settings), src (the source code)
+
+Spaces are a hierarchy, since they have a parent and children. Both are store in the keys property.
+
+*/
+class Space : public Snippet {
 
 	public:
 
-	// Service interface
+	Space(pBaseAPI p_owner);
+	~Space();
+
+	std::map<stdName, std::string> keys;
 
 };
-
-//TODO: Clarify how spaces build a tree.
-//TODO: Clarify why we need singular/plural like collections of, because we want to have just one service for all the spaces at a level.
-//TODO: Think that in Bop, a space is something that accepts then [] and the '.' the latter being just a property of what is on its left:
-		// (E.g.: this.is.just.a.hierarchy.defining.some.path.on.a.tree)
-//TODO: Is row the appropriate abstraction? Is a space somehow always tabular? A row is a key
-
-/** \brief Space: The abstract space.
-
-	This is the abstract parent of DataSpaces, Fields/SemSpaces and Snippet/Concept. A Space is an abstraction over many blocks that
-	provides:
-
-	- An abstraction in the form of rows and columns.
-	- A mechanism to load and update its own metadata in a persisted way.
-
-	Through inheritance, it provides such things as:
-
-	- Sharding and replication across a cluster.
-	- A mechanism to load, update, invalidate blocks. This supports continuous update like in time series.
-	- Indexing by time, key, embedding, etc.
-
-	The class Space is mostly empty. It provides the parent virtual interface and the parents of all the auxiliary classes used
-	to access data.
-
-	\see DataSpaces, Fields, jazz_models::SemSpaces, Snippet, jazz_models::Concept
-*/
 
 } // namespace jazz_bebop
 

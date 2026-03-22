@@ -45,11 +45,11 @@ using namespace jazz_bebop;
 // -----
 
 SCENARIO("Testing Space") {
-	GIVEN("Something") {
-		WHEN("someone looks at it") {
-			THEN("it breaks") {
-				REQUIRE(2 > 1);
-			}
+	pBaseAPI p_api = nullptr;
+	WHEN("I create a Space object") {
+		Space space(p_api);
+		THEN("It has a keys property") {
+			REQUIRE(&space.keys != nullptr);
 		}
 	}
 }
