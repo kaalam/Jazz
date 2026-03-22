@@ -42,15 +42,24 @@ namespace jazz_bebop
 	 Space : I m p l e m e n t a t i o n
 --------------------------------------------------- */
 
+/** \brief Space: Constructor.
+
+	\param p_owner A pointer to the BaseAPI that owns the Space.
+*/
 Space::Space(pBaseAPI p_owner) {
+
 //TODO: Implement constructor.
+
 }
 
 
+/** \brief Space: Destructor.
+*/
 Space::~Space() {
-//TODO: Implement destructor.
-}
 
+//TODO: Implement destructor.
+
+}
 
 } // namespace jazz_bebop
 

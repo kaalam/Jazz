@@ -80,7 +80,7 @@ class Space : public Snippet {
 	Space(pBaseAPI p_owner);
 	~Space();
 
-	std::map<stdName, std::string> keys;
+	std::map<stdName, std::string> keys;	///< An attribute that is a map of names to other Spaces or strings.
 
 };
 
