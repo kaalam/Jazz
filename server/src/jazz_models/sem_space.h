@@ -57,9 +57,16 @@ namespace jazz_models
 
 /** \brief SemSpace: A Fields for Concepts.
 */
-class SemSpace : public Space {
+class SemSpace : public DataSpace {
 
 	public:
+
+	public:
+
+		SemSpace(pBaseAPI p_owner);
+		~SemSpace();
+
+		std::map<stdName, std::string> self;	///< An attribute that is a map of names to other Spaces or strings.
 
 		// SemSpace(pBaseAPI api);
 

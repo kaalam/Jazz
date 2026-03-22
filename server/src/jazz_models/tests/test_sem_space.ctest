@@ -44,15 +44,12 @@ using namespace jazz_models;
 // Tests
 // -----
 
-SCENARIO("Testing sem_space") {
-
-//TODO: Write tests for SemSpace.
-
-	GIVEN("Something") {
-		WHEN("someone looks at it") {
-			THEN("it breaks") {
-				REQUIRE(2 > 1);
-			}
+SCENARIO("Testing SemSpace") {
+	pBaseAPI p_api = nullptr;
+	WHEN("I create a SemSpace object") {
+		SemSpace sem_space(p_api);
+		THEN("It has a self property") {
+			REQUIRE(&sem_space.self != nullptr);
 		}
 	}
 }

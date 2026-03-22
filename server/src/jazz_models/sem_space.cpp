@@ -92,6 +92,29 @@ namespace jazz_models
 //     return arr;
 // }
 
+/*	-----------------------------------------------
+	 SemSpace : I m p l e m e n t a t i o n
+--------------------------------------------------- */
+
+/** \brief SemSpace: Constructor.
+
+	\param p_owner A pointer to the BaseAPI that owns the SemSpace.
+*/
+SemSpace::SemSpace(pBaseAPI p_owner) : DataSpace(p_owner) {
+
+//TODO: Implement constructor.
+
+}
+
+
+/** \brief SemSpace: Destructor.
+*/
+SemSpace::~SemSpace() {
+
+//TODO: Implement destructor.
+
+}
+
 } // namespace jazz_models
 
 #if defined CATCH_TEST
