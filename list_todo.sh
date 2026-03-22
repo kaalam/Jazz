@@ -14,14 +14,14 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-grep -rnw server/ -e "^//TODO:\(.*\)$" > neat_todos.txt
-grep -rnw server/ -e "TODO:" > sloppy_todos.txt
+grep -rnw server/ -e "^//TODO:\(.*\)$" --exclude-dir=coverage_html >neat_todos.txt
+grep -rnw server/ -e "TODO:" --exclude-dir=coverage_html >sloppy_todos.txt
 
 printf "List of sloppy TODOs (in server/):\n"
 diff neat_todos.txt sloppy_todos.txt
 
-grep -rnw uplifts/ -e "^//TODO:\(.*\)$" > neat_todos.txt
-grep -rnw uplifts/ -e "TODO:" > sloppy_todos.txt
+grep -rnw uplifts/ -e "^//TODO:\(.*\)$" --exclude-dir=coverage_html >neat_todos.txt
+grep -rnw uplifts/ -e "TODO:" --exclude-dir=coverage_html >sloppy_todos.txt
 
 printf "List of sloppy TODOs (in uplifts/):\n"
 diff neat_todos.txt sloppy_todos.txt
@@ -29,13 +29,13 @@ diff neat_todos.txt sloppy_todos.txt
 rm neat_todos.txt sloppy_todos.txt
 
 printf "\nList of neat TODOs (in server/):\n\n"
-grep -rnw server/ -e "^//TODO:\(.*\)$"
+grep -rnw server/ -e "^//TODO:\(.*\)$" --exclude-dir=coverage_html
 
 printf "\nNumber of neat TODOs (in server/):\n\n"
-grep -rnw server/ -e "^//TODO:\(.*\)$" | wc -l
+grep -rnw server/ -e "^//TODO:\(.*\)$" --exclude-dir=coverage_html | wc -l
 
 printf "\nList of neat TODOs (in uplifts/):\n\n"
-grep -rnw uplifts/ -e "^//TODO:\(.*\)$"
+grep -rnw uplifts/ -e "^//TODO:\(.*\)$" --exclude-dir=coverage_html
 
 printf "\nNumber of neat TODOs (in uplifts/):\n\n"
-grep -rnw uplifts/ -e "^//TODO:\(.*\)$" | wc -l
+grep -rnw uplifts/ -e "^//TODO:\(.*\)$" --exclude-dir=coverage_html | wc -l
