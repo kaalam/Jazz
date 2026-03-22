@@ -350,7 +350,21 @@ namespace jazz_models
 // 		pBaseAPI p_api;				///< A pointer to the BaseAPI that provides access to containers.
 // 		Name storage_ent;			///< The name of the storage entity (Typically an lmdb database with the metadata of all DataSpaces).
 // };
-// typedef DataSpaces *pDataSpace;		///< A pointer to a DataSpaces
+
+/** \brief DataSpace
+*/
+class DataSpace : public Space {
+
+	public:
+
+		DataSpace(pBaseAPI p_owner);
+		~DataSpace();
+
+		std::map<stdName, std::string> grid;	///< An attribute that is a map of names to other Spaces or strings.
+
+};
+typedef DataSpace *pDataSpace;		///< A pointer to a DataSpace
+
 
 } // namespace jazz_models
 

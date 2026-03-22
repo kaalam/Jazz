@@ -247,6 +247,29 @@ namespace jazz_models
 //     return arr;
 // }
 
+/*	-----------------------------------------------
+	 DataSpace : I m p l e m e n t a t i o n
+--------------------------------------------------- */
+
+/** \brief DataSpace: Constructor.
+
+	\param p_owner A pointer to the BaseAPI that owns the DataSpace.
+*/
+DataSpace::DataSpace(pBaseAPI p_owner) : Space(p_owner) {
+
+//TODO: Implement constructor.
+
+}
+
+
+/** \brief DataSpace: Destructor.
+*/
+DataSpace::~DataSpace() {
+
+//TODO: Implement destructor.
+
+}
+
 } // namespace jazz_models
 
 #if defined CATCH_TEST

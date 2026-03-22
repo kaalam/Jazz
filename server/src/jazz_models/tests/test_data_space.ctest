@@ -528,15 +528,12 @@ using namespace jazz_models;
 // }
 
 
-SCENARIO("Testing data_space") {
-
-//TODO: Write tests for this!
-
-	GIVEN("Something") {
-		WHEN("someone looks at it") {
-			THEN("it breaks") {
-				REQUIRE(2 > 1);
-			}
+SCENARIO("Testing DataSpace") {
+	pBaseAPI p_api = nullptr;
+	WHEN("I create a DataSpace object") {
+		DataSpace data_space(p_api);
+		THEN("It has a grid property") {
+			REQUIRE(&data_space.grid != nullptr);
 		}
 	}
 }
