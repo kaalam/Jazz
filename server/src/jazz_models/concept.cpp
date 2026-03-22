@@ -42,6 +42,24 @@ namespace jazz_models
 	 Concept : I m p l e m e n t a t i o n
 --------------------------------------------------- */
 
+/** \brief Concept: Constructor.
+
+	\param p_owner A pointer to the BaseAPI that owns the Concept.
+*/
+Concept::Concept(pBaseAPI p_owner) : Space(p_owner) {
+
+//TODO: Implement constructor.
+
+}
+
+
+/** \brief Concept: Destructor.
+*/
+Concept::~Concept() {
+
+//TODO: Implement destructor.
+
+}
 
 } // namespace jazz_models
 

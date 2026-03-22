@@ -44,15 +44,12 @@ using namespace jazz_models;
 // Tests
 // -----
 
-SCENARIO("Testing concept") {
-
-//TODO: Write tests for Concept.
-
-	GIVEN("Something") {
-		WHEN("someone looks at it") {
-			THEN("it breaks") {
-				REQUIRE(2 > 1);
-			}
+SCENARIO("Testing Concept") {
+	pBaseAPI p_api = nullptr;
+	WHEN("I create a Concept object") {
+		Concept concept(p_api);
+		THEN("It has a game property") {
+			REQUIRE(&concept.game != nullptr);
 		}
 	}
 }

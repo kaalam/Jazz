@@ -60,11 +60,16 @@ namespace jazz_models
 
 using namespace jazz_bebop;
 
-/** \brief Concept: Generalizes Snippet for informal code.
+/** \brief Concept
 */
-class Concept : public Snippet {
+class Concept : public Space {
 
 	public:
+
+		Concept(pBaseAPI p_owner);
+		~Concept();
+
+		std::map<stdName, std::string> game;	///< An attribute that is a map of names to other Spaces or strings.
 
 };
 typedef Concept *pConcept;		///< A pointer to a Concept
