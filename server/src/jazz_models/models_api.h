@@ -84,6 +84,13 @@ class ModelsAPI : public BaseAPI {
 
 		virtual StatusCode get (pTransaction  &p_txn,
 								ApiQueryState &what);
+
+#ifndef CATCH_TEST
+	private:
+#endif
+
+		pCore  p_core;		///< A pointer to the Core container
+		pBebop p_bebop;		///< A pointer to the Bebop compiler
 };
 typedef ModelsAPI *pModelsAPI;	///< A pointer to a ModelsAPI
 
