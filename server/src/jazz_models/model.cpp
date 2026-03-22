@@ -47,10 +47,12 @@ namespace jazz_models
 	\param a_logger		A pointer to the logger.
 	\param a_config		A pointer to the configuration.
 */
-Model::Model(pLogger a_logger, pConfigFile a_config) : Container(a_logger, a_config) {}
+Model::Model(pLogger a_logger, pConfigFile a_config) : Service(a_logger, a_config) {
+}
 
 
-Model::~Model() { destroy_container(); }
+Model::~Model() {
+}
 
 
 /** Starts the Model service
@@ -59,13 +61,7 @@ Model::~Model() { destroy_container(); }
 */
 StatusCode Model::start() {
 
-	int ret = Container::start();	// This initializes the one-shot functionality.
-
-	if (ret != SERVICE_NO_ERROR)
-		return ret;
-
 //TODO: Implement Model::start()
-
 
 	return SERVICE_NOT_IMPLEMENTED;
 }
@@ -79,7 +75,7 @@ StatusCode Model::shut_down() {
 
 //TODO: Implement Model::shut_down()
 
-	return destroy_container();
+	return Service::shut_down();
 }
 
 } // namespace jazz_models

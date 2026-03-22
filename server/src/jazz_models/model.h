@@ -59,7 +59,7 @@ namespace jazz_models
 
 /** \brief Model: A Space of Concepts.
 */
-class Model : public Container {
+class Model : public Service {
 
 //TODO: A Model has entrypoints http://localhost:8888/jazz_reference/api_ref_model.html#models-in-modelsapi
 //TODO: Every Model supports run and id (Document that)
