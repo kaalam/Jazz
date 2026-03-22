@@ -128,7 +128,10 @@ namespace jazz_bebop
 	\param a_core		A pointer to the Core container.
 */
 Bebop::Bebop(pLogger a_logger, pConfigFile a_config, pChannels a_channels, pVolatile a_volatile, pPersisted a_persisted, pCore a_core)
-	: BaseAPI(a_logger, a_config, a_channels, a_volatile, a_persisted) {}
+	: BaseAPI(a_logger, a_config, a_channels, a_volatile, a_persisted) {
+
+	p_core = a_core;
+}
 
 Bebop::~Bebop() {}
 
@@ -148,12 +151,30 @@ pChar const Bebop::id() {
 */
 StatusCode Bebop::start() {
 
-	int ret = BaseAPI::start();	// This initializes the one-shot functionality.
+	int ret = Container::start();	// This initializes the one-shot functionality.
 
 	if (ret != SERVICE_NO_ERROR)
 		return ret;
 
-//TODO: Implement Bebop::start()
+	memset(base_server, 0, sizeof(base_server));
+
+	BaseNames base = {};
+
+	p_channels->base_names(base);
+	p_volatile->base_names(base);
+	p_persisted->base_names(base);
+	p_core->base_names(base);
+
+	for (BaseNames::iterator it = base.begin(); it != base.end(); ++it) {
+		int tt = TenBitsAtAddress(it->first.c_str());
+
+		if (base_server[tt] != nullptr) {
+			log_printf(LOG_ERROR, "Bebop::start(): Base name conflict with \"%s\"", it->first.c_str());
+
+			return SERVICE_ERROR_STARTING;
+		}
+		base_server[tt] = it->second;
+	}
 
 	return SERVICE_NO_ERROR;
 }

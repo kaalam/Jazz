@@ -101,6 +101,12 @@ class Bebop : public BaseAPI {
 		StatusCode shut_down();
 
 		void base_names(BaseNames &base_names);
+
+#ifndef CATCH_TEST
+	private:
+#endif
+
+		pCore p_core;		///< A pointer to the Core container
 };
 typedef Bebop *pBebop;		///< A pointer to a Bebop compiler
 
