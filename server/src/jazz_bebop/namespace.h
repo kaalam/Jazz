@@ -48,14 +48,21 @@
 #define INCLUDED_JAZZ_BEBOP_NAMESPACE
 
 
-/** \brief One liner.
-
-//TODO: Write this!
-*/
-
 namespace jazz_bebop
 {
 
+/** \brief A cpp stdlib container-based to make it more efficient to the compiler.
+
+*/
+
+class NameSpace  {
+
+	public:
+
+	NameSpace();
+	~NameSpace();
+
+};
 
 } // namespace jazz_bebop
 

@@ -45,14 +45,11 @@ using namespace jazz_bebop;
 // -----
 
 SCENARIO("Testing namespace") {
+	WHEN("I have a namespace") {
+		NameSpace ns;
 
-//TODO: Write tests for this!
-
-	GIVEN("Something") {
-		WHEN("someone looks at it") {
-			THEN("it breaks") {
-				REQUIRE(2 > 1);
-			}
+		THEN("I have something") {
+			REQUIRE(&ns != nullptr);
 		}
 	}
 }

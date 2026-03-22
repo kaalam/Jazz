@@ -41,6 +41,18 @@
 namespace jazz_bebop
 {
 
+/*	-----------------------------------------------
+	 NameSpace : I m p l e m e n t a t i o n
+--------------------------------------------------- */
+
+NameSpace::NameSpace() {
+//TODO: Implement constructor.
+}
+
+NameSpace::~NameSpace() {
+//TODO: Implement destructor.
+}
+
 
 } // namespace jazz_bebop
 
