@@ -37,6 +37,7 @@
 #pragma once
 #include "src/jazz_elements/persisted.h"
 
+#include <filesystem>
 
 using namespace jazz_elements;
 
@@ -760,6 +761,9 @@ SCENARIO("Testing LMDB entity and key names.") {
 
 
 SCENARIO("Strong End-to-end lmdb tests") {
+
+	std::filesystem::remove_all("./jazz_dbg_mdb/");
+
 	REQUIRE(PER.start() == SERVICE_NO_ERROR);
 
 	REQUIRE(strstr(PER.id(), "Persisted from Jazz") != nullptr);
