@@ -2558,6 +2558,10 @@ SCENARIO("Testing BaseAPI protected: move_const(), get_right_local(), get_right_
 				REQUIRE(BAPI.parse(q_state, (pChar) "//lmdb/tt3bapi/bl9=//bash/exec/(//lmdb/tt3bapi/bl2)", BASE_API_GET));
 				REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
 				REQUIRE(BAPI.parse(q_state, (pChar) "//lmdb/tt3bapi/bl9=//bash/exec/(//lmdb/tt3bapi/bl3)", BASE_API_GET));
+
+				BAPI.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_ANY;
+				REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
+				BAPI.debug_trigger_failure = 0;
 				REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_NO_ERROR);
 				REQUIRE(p_txn->p_block->cell_type == CELL_TYPE_BYTE);
 				REQUIRE(strcmp((char *) &p_txn->p_block->tensor.cell_byte, "2 + 2 = 4\n") == 0);
@@ -2565,6 +2569,11 @@ SCENARIO("Testing BaseAPI protected: move_const(), get_right_local(), get_right_
 				REQUIRE(p_txn == nullptr);
 
 				REQUIRE(BAPI.parse(q_state, (pChar) "//lmdb/tt3bapi/bl9=//bash/exec/(&echo \"2 + 2 = $(expr 2 + 2)\")", BASE_API_GET));
+
+				BAPI.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_4;
+				REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
+
+				BAPI.debug_trigger_failure = 0;
 				REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_NO_ERROR);
 				REQUIRE(p_txn->p_block->cell_type == CELL_TYPE_BYTE);
 				REQUIRE(strcmp((char *) &p_txn->p_block->tensor.cell_byte, "2 + 2 = 4\n") == 0);
@@ -2608,6 +2617,11 @@ SCENARIO("Testing BaseAPI protected: move_const(), get_right_local(), get_right_
 				REQUIRE(BAPI.parse(q_state, (pChar) "//bash/exec/(//lmdb/tt3bapi/bl2)", BASE_API_GET));
 				REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
 				REQUIRE(BAPI.parse(q_state, (pChar) "//bash/exec/(//lmdb/tt3bapi/bl3)", BASE_API_GET));
+
+				BAPI.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_4;
+				REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
+
+				BAPI.debug_trigger_failure = 0;
 				REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_NO_ERROR);
 				REQUIRE(p_txn->p_block->cell_type == CELL_TYPE_BYTE);
 				REQUIRE(strcmp((char *) &p_txn->p_block->tensor.cell_byte, "2 + 2 = 4\n") == 0);
@@ -2615,6 +2629,11 @@ SCENARIO("Testing BaseAPI protected: move_const(), get_right_local(), get_right_
 				REQUIRE(p_txn == nullptr);
 
 				REQUIRE(BAPI.parse(q_state, (pChar) "//bash/exec/(&echo \"2 + 2 = $(expr 2 + 2)\")", BASE_API_GET));
+
+				BAPI.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_4;
+				REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
+
+				BAPI.debug_trigger_failure = 0;
 				REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_NO_ERROR);
 				REQUIRE(p_txn->p_block->cell_type == CELL_TYPE_BYTE);
 				REQUIRE(strcmp((char *) &p_txn->p_block->tensor.cell_byte, "2 + 2 = 4\n") == 0);
@@ -2681,6 +2700,11 @@ SCENARIO("Direct edge cases for BaseAPI.get_right_local() and BaseAPI.get_left_l
 
 		prep_txn = (pTransaction) &prep_state;
 		REQUIRE(BAPI.parse(prep_state, (pChar) "//lmdb/tt4edge/bl1=&[[1,2],[3,4]];", BASE_API_GET));
+		REQUIRE(BAPI.get(prep_txn, prep_state) == SERVICE_NO_ERROR);
+		REQUIRE(prep_txn == nullptr);
+
+		prep_txn = (pTransaction) &prep_state;
+		REQUIRE(BAPI.parse(prep_state, (pChar) "//lmdb/tt4edge/bl_str=&[\"[1,2,3]\"];", BASE_API_GET));
 		REQUIRE(BAPI.get(prep_txn, prep_state) == SERVICE_NO_ERROR);
 		REQUIRE(prep_txn == nullptr);
 
@@ -2797,7 +2821,12 @@ SCENARIO("Direct edge cases for BaseAPI.get_right_local() and BaseAPI.get_left_l
 				p_lmdb->destroy_transaction(p_aux);
 				REQUIRE(p_aux == nullptr);
 			}
-			REQUIRE(BAPI.get_right_local(p_txn, q_state) == expected_ret);
+
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "Wrong_bl1");
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
+
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_NO_ERROR);
 			destroy_if_any(p_txn);
 
 			clear_state();
@@ -2821,7 +2850,10 @@ SCENARIO("Direct edge cases for BaseAPI.get_right_local() and BaseAPI.get_left_l
 				destroy_if_any(p_expected);
 				destroy_if_any(p_aux);
 			}
-			REQUIRE(BAPI.get_right_local(p_txn, q_state) == expected_ret);
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
+			strcpy(q_state.url, "[0]");
+
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_NO_ERROR);
 			destroy_if_any(p_txn);
 
 			clear_state();
@@ -2832,8 +2864,12 @@ SCENARIO("Direct edge cases for BaseAPI.get_right_local() and BaseAPI.get_left_l
 
 			clear_state();
 			q_state.apply = APPLY_ASSIGN_RAW;
+
 			set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
 			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
+
+			set_loc(q_state.r_value, "lmdb", "tt4edge", "bl_str");
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_NO_ERROR);
 			destroy_if_any(p_txn);
 
 			clear_state();
@@ -2845,6 +2881,11 @@ SCENARIO("Direct edge cases for BaseAPI.get_right_local() and BaseAPI.get_left_l
 			clear_state();
 			q_state.apply = APPLY_ASSIGN_TEXT;
 			set_loc(q_state.r_value, "lmdb", "tt4edge", "bl1");
+
+			BAPI.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_6;
+			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
+
+			BAPI.debug_trigger_failure = 0;
 			REQUIRE(BAPI.get_right_local(p_txn, q_state) == SERVICE_NO_ERROR);
 			destroy_if_any(p_txn);
 		}
@@ -2900,7 +2941,10 @@ SCENARIO("Direct edge cases for BaseAPI.get_right_local() and BaseAPI.get_left_l
 				p_lmdb->destroy_transaction(p_aux);
 				REQUIRE(p_aux == nullptr);
 			}
-			REQUIRE(BAPI.get_left_local(p_txn, q_state) == expected_ret);
+			set_left("lmdb", "tt4edge", "wrong_bl1");
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
+			set_left("lmdb", "tt4edge", "bl1");
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_NO_ERROR);
 			destroy_if_any(p_txn);
 
 			clear_state();
@@ -2925,7 +2969,10 @@ SCENARIO("Direct edge cases for BaseAPI.get_right_local() and BaseAPI.get_left_l
 				destroy_if_any(p_expected);
 				destroy_if_any(p_aux);
 			}
-			REQUIRE(BAPI.get_left_local(p_txn, q_state) == expected_ret);
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
+			strcpy(q_state.url, "[0]");
+
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_NO_ERROR);
 			destroy_if_any(p_txn);
 
 			clear_state();
@@ -2938,6 +2985,9 @@ SCENARIO("Direct edge cases for BaseAPI.get_right_local() and BaseAPI.get_left_l
 			q_state.apply = APPLY_RAW;
 			set_left("lmdb", "tt4edge", "bl1");
 			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
+
+			set_left("lmdb", "tt4edge", "bl_str");
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_NO_ERROR);
 			destroy_if_any(p_txn);
 
 			clear_state();
@@ -2949,6 +2999,11 @@ SCENARIO("Direct edge cases for BaseAPI.get_right_local() and BaseAPI.get_left_l
 			clear_state();
 			q_state.apply = APPLY_TEXT;
 			set_left("lmdb", "tt4edge", "bl1");
+
+			BAPI.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_6;
+			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_ERROR_IO_ERROR);
+
+			BAPI.debug_trigger_failure = 0;
 			REQUIRE(BAPI.get_left_local(p_txn, q_state) == SERVICE_NO_ERROR);
 			destroy_if_any(p_txn);
 		}
