@@ -575,6 +575,9 @@ StatusCode Container::new_block(pTransaction &p_txn,
 								AttributeMap *att) {
 
 #ifdef CATCH_TEST
+	if (debug_trigger_failure & (TRIGGER_FAIL_NEW_BLOCK_ANY | TRIGGER_FAIL_NEW_BLOCK_1))
+		return SERVICE_ERROR_TRIGGERED;
+
 	if ((debug_trigger_failure & TRIGGER_FAIL_NEW_STRING_BLOCK) && (cell_type == CELL_TYPE_STRING))
 		return SERVICE_ERROR_TRIGGERED;
 #endif
@@ -833,6 +836,11 @@ StatusCode Container::new_block(pTransaction	   &p_txn,
 								AttributeMap	   *dims,
 								AttributeMap	   *att) {
 
+#ifdef CATCH_TEST
+	if (debug_trigger_failure & (TRIGGER_FAIL_NEW_BLOCK_ANY | TRIGGER_FAIL_NEW_BLOCK_2))
+		return SERVICE_ERROR_TRIGGERED;
+#endif
+
 	StatusCode ret = new_transaction(p_txn);
 
 	if (ret != SERVICE_NO_ERROR) return ret;
@@ -945,6 +953,11 @@ StatusCode Container::new_block(pTransaction &p_txn,
 								pBlock		  p_from,
 						   		pBlock		  p_row_filter,
 								AttributeMap *att) {
+
+#ifdef CATCH_TEST
+	if (debug_trigger_failure & (TRIGGER_FAIL_NEW_BLOCK_ANY | TRIGGER_FAIL_NEW_BLOCK_3))
+		return SERVICE_ERROR_TRIGGERED;
+#endif
 
 	StatusCode ret = new_transaction(p_txn);
 
@@ -1137,6 +1150,11 @@ StatusCode Container::new_block(pTransaction &p_txn,
 						   		pChar		  name,
 								AttributeMap *att) {
 
+#ifdef CATCH_TEST
+	if (debug_trigger_failure & (TRIGGER_FAIL_NEW_BLOCK_ANY | TRIGGER_FAIL_NEW_BLOCK_4))
+		return SERVICE_ERROR_TRIGGERED;
+#endif
+
 	if (p_from->cell_type != CELL_TYPE_TUPLE) {
 		p_txn = nullptr;
 
@@ -1180,6 +1198,11 @@ StatusCode Container::new_block(pTransaction &p_txn,
 						   		int			  cell_type,
 								pKind		  p_as_kind,
 								AttributeMap *att) {
+
+#ifdef CATCH_TEST
+	if (debug_trigger_failure & (TRIGGER_FAIL_NEW_BLOCK_ANY | TRIGGER_FAIL_NEW_BLOCK_5))
+		return SERVICE_ERROR_TRIGGERED;
+#endif
 
 	pChar p_source;
 	int	  source_l;
@@ -1519,6 +1542,11 @@ StatusCode Container::new_block(pTransaction &p_txn,
 								bool		  ret_as_string,
 								AttributeMap *att) {
 
+#ifdef CATCH_TEST
+	if (debug_trigger_failure & (TRIGGER_FAIL_NEW_BLOCK_ANY | TRIGGER_FAIL_NEW_BLOCK_6))
+		return SERVICE_ERROR_TRIGGERED;
+#endif
+
 	int item_len[MAX_ITEMS_IN_KIND];
 	int total_bytes;
 
@@ -1677,6 +1705,11 @@ the Container will take care of freeing the std::map before destroying the trans
 */
 StatusCode Container::new_block(pTransaction &p_txn, int cell_type) {
 
+#ifdef CATCH_TEST
+	if (debug_trigger_failure & (TRIGGER_FAIL_NEW_BLOCK_ANY | TRIGGER_FAIL_NEW_BLOCK_7))
+		return SERVICE_ERROR_TRIGGERED;
+#endif
+
 	if ((cell_type & 0xff) != CELL_TYPE_INDEX){
 		p_txn = nullptr;
 
@@ -1721,6 +1754,11 @@ StatusCode Container::new_block(pTransaction &p_txn, int cell_type) {
 
 */
 StatusCode Container::new_block(pTransaction &p_txn, Index &index) {
+
+#ifdef CATCH_TEST
+	if (debug_trigger_failure & (TRIGGER_FAIL_NEW_BLOCK_ANY | TRIGGER_FAIL_NEW_BLOCK_8))
+		return SERVICE_ERROR_TRIGGERED;
+#endif
 
 	p_txn = nullptr;
 

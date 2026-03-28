@@ -114,9 +114,18 @@ namespace jazz_elements
 #define WRITE_AS_ANY_WRITE				0x1C	///< If mode & this is zero, use base default.
 
 // Bit masks to trigger failures in tests when set in debug_trigger_failure
-#define TRIGGER_FAIL_TEXT_BLOCK			0x01	///< Trigger a failure in new_text_block() to test error handling.
-#define TRIGGER_FAIL_FILL_TENSOR		0x02	///< Trigger a failure in fill_tensor() to test error handling.
-#define TRIGGER_FAIL_NEW_STRING_BLOCK	0x04	///< Trigger a failure in new_block() (1) creating a string.
+#define TRIGGER_FAIL_TEXT_BLOCK			0x001	///< Trigger a failure in new_text_block() to test error handling.
+#define TRIGGER_FAIL_FILL_TENSOR		0x002	///< Trigger a failure in fill_tensor() to test error handling.
+#define TRIGGER_FAIL_NEW_STRING_BLOCK	0x004	///< Trigger a failure in new_block() (1) creating a string.
+#define TRIGGER_FAIL_NEW_BLOCK_ANY		0x008	///< Trigger a failure in any new_block().
+#define TRIGGER_FAIL_NEW_BLOCK_1		0x010	///< Trigger a failure in new_block() (1) creating anything.
+#define TRIGGER_FAIL_NEW_BLOCK_2		0x020	///< Trigger a failure in new_block() (2) creating anything.
+#define TRIGGER_FAIL_NEW_BLOCK_3		0x040	///< Trigger a failure in new_block() (3) creating anything.
+#define TRIGGER_FAIL_NEW_BLOCK_4		0x080	///< Trigger a failure in new_block() (4) creating anything.
+#define TRIGGER_FAIL_NEW_BLOCK_5		0x100	///< Trigger a failure in new_block() (5) creating anything.
+#define TRIGGER_FAIL_NEW_BLOCK_6		0x200	///< Trigger a failure in new_block() (6) creating anything.
+#define TRIGGER_FAIL_NEW_BLOCK_7		0x400	///< Trigger a failure in new_block() (7) creating anything.
+#define TRIGGER_FAIL_NEW_BLOCK_8		0x800	///< Trigger a failure in new_block() (8) creating anything.
 
 
 /** \brief A lookup table for all the possible values of a char mapped into an 8-bit state.

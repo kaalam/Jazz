@@ -757,12 +757,20 @@ SCENARIO("Stress-testing new_transaction()/destroy_transaction()") {
 
 	TensorDim dim_t1 {{500, 10, 0}}, dim_t2 {{500, 1000, 0}};
 
+	CNT.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_ANY;
+	REQUIRE(CNT.new_block(p_txn[0], CELL_TYPE_BYTE, dim_t1.dim, FILL_NEW_WITH_ZERO) == SERVICE_ERROR_TRIGGERED);
+
+	CNT.debug_trigger_failure = 0;
 	REQUIRE(CNT.new_block(p_txn[0], CELL_TYPE_BYTE, dim_t1.dim, FILL_NEW_WITH_ZERO) == SERVICE_NO_ERROR);
 	REQUIRE(p_txn[0] != nullptr);
 	REQUIRE(p_txn[0]->p_block != nullptr);
 	REQUIRE(p_txn[0]->status  == BLOCK_STATUS_READY);
 	REQUIRE(p_txn[0]->p_block->hash64 == 0);
 
+	CNT.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_ANY;
+	REQUIRE(CNT.new_block(p_txn[1], p_txn[0]->p_block, (pBlock) nullptr) == SERVICE_ERROR_TRIGGERED);
+
+	CNT.debug_trigger_failure = 0;
 	REQUIRE(CNT.new_block(p_txn[1], p_txn[0]->p_block, (pBlock) nullptr) == SERVICE_ERROR_NO_MEM);
 	REQUIRE(p_txn[1] == nullptr);
 
@@ -2879,6 +2887,10 @@ SCENARIO("Testing new_block() (2) Create a Kind or Tuple") {
 			init_static_hea(p_hea2[1], p_blk2[1] = p_tx2->p_block);
 			init_static_hea(p_hea3[0], p_blk3[0] = p_tx3->p_block);
 
+			CNT.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_ANY;
+			REQUIRE(CNT.new_block(p_tx_tup1, 4, p_hea1, p_names1, p_blk1, nullptr, nullptr) == SERVICE_ERROR_TRIGGERED);
+
+			CNT.debug_trigger_failure = 0;
 			REQUIRE(CNT.new_block(p_tx_tup1, 4, p_hea1, p_names1, p_blk1, nullptr, nullptr) == SERVICE_NO_ERROR);
 			REQUIRE(CNT.new_block(p_tx_tup2, 2, p_hea2, p_names2, p_blk2, nullptr, &att) == SERVICE_NO_ERROR);
 			REQUIRE(CNT.new_block(p_tx_tup3, 1, p_hea3, p_names3, p_blk3, nullptr, &att) == SERVICE_NO_ERROR);
@@ -4784,6 +4796,11 @@ SCENARIO("Testing new_block() (4) Create a Tensor by selecting an item from a Tu
 			att_new[BLOCK_ATTRIB_LANGUAGE] = "c/c++";
 
 			p_xbl11 = p_tx_tup3;
+
+			CNT.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_ANY;
+			REQUIRE(CNT.new_block(p_xbl11, (pTuple) p_tx3->p_block, p_names2[0], nullptr) == SERVICE_ERROR_TRIGGERED);
+
+			CNT.debug_trigger_failure = 0;
 			REQUIRE(CNT.new_block(p_xbl11, (pTuple) p_tx3->p_block, p_names2[0], nullptr) == SERVICE_ERROR_WRONG_TYPE);
 			REQUIRE(p_xbl11 == nullptr);
 
@@ -5271,6 +5288,10 @@ SCENARIO("Testing new_block() (5) & (6) Serializing/parsing every possible thing
 			pTransaction s_byt, s_bbo, s_int, s_fac, s_gra, s_boo, s_sin, s_st1, s_st2, s_lin, s_tim, s_dou, s_ki1, s_ki2, s_ki3, s_ki4;
 			pTransaction s_ki5, s_tp1, s_tp2, z_tp1, z_tp2, z_tp3, z_tp4, t_tp1, t_tp2, s_stx;
 
+			CNT.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_ANY;
+			REQUIRE(CNT.new_block(s_byt, p_byt->p_block) == SERVICE_ERROR_TRIGGERED);
+
+			CNT.debug_trigger_failure = 0;
 			REQUIRE(CNT.new_block(s_byt, p_byt->p_block) == SERVICE_NO_ERROR);
 			REQUIRE(s_byt->p_block != nullptr);
 			REQUIRE(s_byt->status  == BLOCK_STATUS_READY);
@@ -5574,6 +5595,10 @@ SCENARIO("Testing new_block() (5) & (6) Serializing/parsing every possible thing
 				pTransaction x_ki1, x_ki2, x_ki3, x_ki4, x_ki5, x_tp1, x_tp2, y_byt, y_int, y_sin, y_lin, y_tim, y_dou, y_ki1, y_tp1;
 				pTransaction a_int, a_dou, a_st1, a_st2, a_ki1, a_ki2, a_ki3, a_ki4, a_ki5, a_tp1, a_tp2, x_err, x_stx, x_sty;
 
+				CNT.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_ANY;
+				REQUIRE(CNT.new_block(x_byt, s_byt->p_block, CELL_TYPE_BYTE) == SERVICE_ERROR_TRIGGERED);
+
+				CNT.debug_trigger_failure = 0;
 				REQUIRE(CNT.new_block(x_byt, s_byt->p_block, CELL_TYPE_BYTE) == SERVICE_NO_ERROR);
 				REQUIRE(x_byt->p_block != nullptr);
 				REQUIRE(x_byt->status  == BLOCK_STATUS_READY);
@@ -6128,6 +6153,11 @@ SCENARIO("Testing new_block() (7) Create an empty Index block.") {
 		pTransaction p_tx_ii, p_tx_is, p_tx_si, p_tx_ss;
 
 		p_tx_ii = (pTransaction) &p_tx_is;
+
+		CNT.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_ANY;
+		REQUIRE(CNT.new_block(p_tx_ii, CELL_TYPE_BYTE) == SERVICE_ERROR_TRIGGERED);
+
+		CNT.debug_trigger_failure = 0;
 		REQUIRE(CNT.new_block(p_tx_ii, CELL_TYPE_BYTE) == SERVICE_ERROR_WRONG_TYPE);
 		REQUIRE(p_tx_ii == nullptr);
 
@@ -6319,6 +6349,10 @@ SCENARIO("Testing new_block() (8) Create Tuple from Index") {
 
 			pTransaction p_tup_ii, p_tup_is, p_tup_si, p_tup_ss;
 
+			CNT.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_ANY;
+			REQUIRE(CNT.new_block(p_tup_ii, p_tx_ii->p_hea->index) == SERVICE_ERROR_TRIGGERED);
+
+			CNT.debug_trigger_failure = 0;
 			REQUIRE(CNT.new_block(p_tup_ii, p_tx_ii->p_hea->index) == SERVICE_NO_ERROR);
 			REQUIRE(CNT.new_block(p_tup_is, p_tx_is->p_hea->index) == SERVICE_NO_ERROR);
 			REQUIRE(CNT.new_block(p_tup_si, p_tx_si->p_hea->index) == SERVICE_NO_ERROR);
