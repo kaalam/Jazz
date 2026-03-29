@@ -81,7 +81,7 @@ pChar const Core::id() {
 */
 StatusCode Core::start() {
 
-	int ret = BaseAPI::start();	// This initializes the one-shot functionality.
+	int ret = BaseAPI::start();
 
 	if (ret != SERVICE_NO_ERROR) return ret;
 

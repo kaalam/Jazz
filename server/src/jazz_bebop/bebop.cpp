@@ -151,30 +151,13 @@ pChar const Bebop::id() {
 */
 StatusCode Bebop::start() {
 
-	int ret = Container::start();	// This initializes the one-shot functionality.
+	int ret = BaseAPI::start();
 
 	if (ret != SERVICE_NO_ERROR)
 		return ret;
 
-	memset(base_server, 0, sizeof(base_server));
-
-	BaseNames base = {};
-
-	p_channels->base_names(base);
-	p_volatile->base_names(base);
-	p_persisted->base_names(base);
-	p_core->base_names(base);
-
-	for (BaseNames::iterator it = base.begin(); it != base.end(); ++it) {
-		int tt = TenBitsAtAddress(it->first.c_str());
-
-		if (base_server[tt] != nullptr) {
-			log_printf(LOG_ERROR, "Bebop::start(): Base name conflict with \"%s\"", it->first.c_str());
-
-			return SERVICE_ERROR_STARTING;
-		}
-		base_server[tt] = it->second;
-	}
+	if (!set_base_server_names(p_core))
+		return SERVICE_ERROR_STARTING;
 
 	return SERVICE_NO_ERROR;
 }

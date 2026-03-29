@@ -99,27 +99,13 @@ pChar const API::id() {
 */
 StatusCode API::start() {
 
-	int ret = BaseAPI::start();	// This initializes the one-shot functionality.
+	int ret = BaseAPI::start();
 
 	if (ret != SERVICE_NO_ERROR)
 		return ret;
 
-	BaseNames base = {};
-
-	p_core->base_names(base);
-	p_bebop->base_names(base);
-	p_model->base_names(base);
-
-	for (BaseNames::iterator it = base.begin(); it != base.end(); ++it) {
-		int tt = TenBitsAtAddress(it->first.c_str());
-
-		if (base_server[tt] != nullptr) {
-			log_printf(LOG_ERROR, "API::start(): Base name conflict with \"%s\"", it->first.c_str());
-
-			return SERVICE_ERROR_STARTING;
-		}
-		base_server[tt] = it->second;
-	}
+	if (!set_base_server_names(p_core) || !set_base_server_names(p_bebop) || !set_base_server_names(p_model))
+		return SERVICE_ERROR_STARTING;
 
 	String statics_path;
 
