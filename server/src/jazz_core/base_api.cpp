@@ -440,37 +440,34 @@ bool BaseAPI::parse(ApiQueryState &q_state, pChar p_url, int method, bool recurs
 					return false;
 
 				switch (q_state.apply) {
-				case APPLY_NOTHING:
-					q_state.apply = APPLY_ASSIGN_NOTHING;
-					return true;
 				case APPLY_NAME:
 					q_state.apply = APPLY_ASSIGN_NAME;
-					return true;
+					break;
 				case APPLY_URL:
 					q_state.apply = APPLY_ASSIGN_URL;
-					return true;
+					break;
 				case APPLY_FUNCTION:
 					q_state.apply = APPLY_ASSIGN_FUNCTION;
-					return true;
+					break;
 				case APPLY_FUNCT_CONST:
 					q_state.apply = APPLY_ASSIGN_FUNCT_CONST;
-					return true;
+					break;
 				case APPLY_FILTER:
 					q_state.apply = APPLY_ASSIGN_FILTER;
-					return true;
+					break;
 				case APPLY_FILT_CONST:
 					q_state.apply = APPLY_ASSIGN_FILT_CONST;
-					return true;
+					break;
 				case APPLY_RAW:
 					q_state.apply = APPLY_ASSIGN_RAW;
-					return true;
+					break;
 				case APPLY_TEXT:
 					q_state.apply = APPLY_ASSIGN_TEXT;
-					return true;
+					break;
+				default:
+					q_state.apply = APPLY_ASSIGN_NOTHING;
 				}
-				q_state.state = PSTATE_FAILED;
-
-				return false;
+				return true;
 
 			case '[':
 				if (method != BASE_API_GET)
@@ -735,8 +732,7 @@ StatusCode BaseAPI::get(pTransaction &p_txn, ApiQueryState &what) {
 	case APPLY_NEW_ENTITY:
 		if (what.l_node[0] != 0) {
 			ret = p_channels->forward_get(p_txn, what.l_node, what.url);
-			if (ret == SERVICE_NO_ERROR)
-				p_channels->destroy_transaction(p_txn); }
+			if (ret == SERVICE_NO_ERROR) p_channels->destroy_transaction(p_txn); }
 		else {
 			Locator	   loc;
 			pContainer p_container = (pContainer) base_server[TenBitsAtAddress(what.base)];
