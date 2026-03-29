@@ -106,6 +106,8 @@ namespace jazz_elements
 #define TRIGGER_FAIL_ZMQ				(1u << 22)		///< Trigger a failure in zmq to test error handling.
 #define TRIGGER_FAIL_BASH				(1u << 23)		///< Trigger a failure in bash to test error handling.
 
+#define TRIGGER_FAKE_FORWARD_SUCCESS	(1u << 24)		///< Fake a successful forward_get without a cluster.
+
 /// A map for defining http config names
 typedef std::map<int, String>	MapIS;
 

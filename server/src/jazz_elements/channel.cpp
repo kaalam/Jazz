@@ -1089,6 +1089,11 @@ void Channels::base_names(BaseNames &base_names) {
 */
 MHD_StatusCode Channels::forward_get(pTransaction &p_txn, Name node, pChar p_url) {
 
+#ifdef CATCH_TEST
+	if (debug_trigger_failure & TRIGGER_FAKE_FORWARD_SUCCESS)
+		return new_block(p_txn, CELL_TYPE_STRING, nullptr, FILL_WITH_TEXTFILE, 0, "Fake response from forward_get");
+#endif
+
 	char buffer[1024];
 
 	if (!curl_ok) return SERVICE_ERROR_BASE_FORBIDDEN;
