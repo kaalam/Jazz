@@ -37,10 +37,6 @@
 #pragma once
 #include "src/jazz_core/base_api.h"
 
-//TODO: Make a test of header() of every container (Volatile, Persisted and Channel) they must all return the metadata: In ordinary blocks
-//		that is the header, in tuples, the main header and the array of headers of the items, in kinds, everything. Must support all
-//		the type of kinds: CELL_TYPE_BLOCK_KIND, CELL_TYPE_TUPLE_KIND and CELL_TYPE_OBJECT_KIND.
-
 using namespace jazz_core;
 
 
@@ -2490,6 +2486,14 @@ SCENARIO("Testing BaseAPI protected: move_const(), get_right_local(), get_right_
 		REQUIRE(p_txn == nullptr);
 
 		p_txn = (pTransaction) &q_state;
+		BAPI.debug_trigger_failure = TRIGGER_FAIL_NEW_BLOCK_ANY;
+		REQUIRE(!BAPI.block_from_const(p_txn, (pChar) "(echo \"2 + 2 = $(expr 2 + 2)\")", true));
+		BAPI.debug_trigger_failure = 0;
+		uint64_t alloc_backup = BAPI.fail_alloc_bytes;
+		BAPI.fail_alloc_bytes = BAPI.alloc_bytes + 140;					// Requires 112 for the first block + 4176 for the second. This
+
+		REQUIRE(!BAPI.block_from_const(p_txn, (pChar) "(echo \"2 + 2 = $(expr 2 + 2)\")", true));
+		BAPI.fail_alloc_bytes = alloc_backup;
 		REQUIRE(BAPI.block_from_const(p_txn, (pChar) "(echo \"2 + 2 = $(expr 2 + 2)\")", true));
 		REQUIRE(p_txn->p_block->cell_type == CELL_TYPE_TUPLE);
 
@@ -3129,6 +3133,18 @@ SCENARIO("Testing BaseAPI: header(), get(), put(), delete()") {
 	REQUIRE(VOL.start()	== 0);
 	REQUIRE(PER.start() == 0);
 
+	BAPI.log_error_level = LOG_DEBUG;
+
+	pVolatile p_vol = BAPI.p_volatile;
+
+	BAPI.p_volatile = nullptr;
+	REQUIRE(BAPI.start() == SERVICE_ERROR_STARTING);
+
+	BAPI.p_volatile = (pVolatile) BAPI.p_channels;	// Forces TenBitsAtAddress[] conflict
+	REQUIRE(BAPI.start() == SERVICE_ERROR_STARTING);
+
+	BAPI.p_volatile = p_vol;
+
 	REQUIRE(BAPI.start() == 0);
 
 	GIVEN("The BaseAPI is running") {
@@ -3200,6 +3216,9 @@ SCENARIO("Testing BaseAPI: header(), get(), put(), delete()") {
 
 			REQUIRE(BAPI.parse(q_state, (pChar) "///www//no_lmdb/tt3bapi/bl3", BASE_API_GET));
 			REQUIRE(BAPI.header(hea, q_state) != SERVICE_NO_ERROR);
+			BAPI.p_channels->debug_trigger_failure = TRIGGER_FAKE_FORWARD_SUCCESS;
+			REQUIRE(BAPI.header(hea, q_state) == SERVICE_NO_ERROR);
+			BAPI.p_channels->debug_trigger_failure = 0;
 		}
 
 		WHEN("We test get()") {
@@ -3255,9 +3274,17 @@ SCENARIO("Testing BaseAPI: header(), get(), put(), delete()") {
 		}
 
 		WHEN("We test remove()") {
-			REQUIRE(BAPI.parse(q_state, (pChar) "//base/entity/key", BASE_API_DELETE));
+			REQUIRE(BAPI.parse(q_state, (pChar) "//xxx/entity/key", BASE_API_DELETE));
+			REQUIRE(BAPI.remove(q_state) == SERVICE_ERROR_WRONG_BASE);
+			REQUIRE(BAPI.parse(q_state, (pChar) "//lmdb/entity/key", BASE_API_DELETE));
 			q_state.apply = APPLY_JAZZ_INFO;
 			REQUIRE(BAPI.remove(q_state) == SERVICE_ERROR_WRONG_ARGUMENTS);
+			strcpy(q_state.l_node, "missing");
+			REQUIRE(BAPI.remove(q_state) == SERVICE_ERROR_UNKNOWN_JAZZNODE);
+			REQUIRE(BAPI.parse(q_state, (pChar) "//lmdb/entity/key", BASE_API_DELETE));
+			strcpy(q_state.url, "invalid");
+			q_state.apply = APPLY_URL;
+			REQUIRE(BAPI.remove(q_state) == SERVICE_ERROR_PARSING_NAMES);
 		}
 
 		REQUIRE(BAPI.parse(q_state, (pChar) "//lmdb/tt3bapi", BASE_API_DELETE));
@@ -3507,6 +3534,10 @@ SCENARIO("Coverage-focused BaseAPI.get()/put() branches without starting Channel
 		REQUIRE(BAPI.block_from_const(p_const, (pChar) "[1,2,3]"));
 		REQUIRE(p_const != nullptr);
 
+		pTransaction p_raw = nullptr;
+		REQUIRE(BAPI.block_from_const(p_raw, (pChar) "[\"[1,2,3]\"]"));
+		REQUIRE(p_raw != nullptr);
+
 		ApiQueryState where;
 		StatusCode	 ret;
 
@@ -3533,8 +3564,8 @@ SCENARIO("Coverage-focused BaseAPI.get()/put() branches without starting Channel
 		clear_state(where);
 		where.apply = APPLY_RAW;
 		set_left(where, "put_raw_ok");
-		ret = BAPI.put(where, p_const->p_block);
-		CHECK((ret == SERVICE_NO_ERROR || ret == SERVICE_ERROR_IO_ERROR || ret == SERVICE_ERROR_NEW_BLOCK_ARGS));
+		REQUIRE(BAPI.put(where, p_const->p_block) == SERVICE_ERROR_NEW_BLOCK_ARGS);
+		REQUIRE(BAPI.put(where, p_raw->p_block) == SERVICE_NO_ERROR);
 
 		if (p_undef != nullptr) {
 			clear_state(where);
@@ -3578,6 +3609,9 @@ SCENARIO("Coverage-focused BaseAPI.get()/put() branches without starting Channel
 
 		p_const->p_owner->destroy_transaction(p_const);
 		REQUIRE(p_const == nullptr);
+
+		p_raw->p_owner->destroy_transaction(p_raw);
+		REQUIRE(p_raw == nullptr);
 
 		p_plain->p_owner->destroy_transaction(p_plain);
 		REQUIRE(p_plain == nullptr);
