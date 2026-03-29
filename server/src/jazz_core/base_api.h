@@ -650,6 +650,34 @@ class BaseAPI : public Container {
 			return p_container->put(where, p_block);
 		}
 
+		/** Add the pointers to the containers in base_server.
+
+			\param p_cont A pointer to a container to be added to the base_server LUT. The base names of the container will be used as keys.
+
+			\return true if successful, false if there was a conflict in the base names or if p_cont is null.
+		*/
+		inline bool set_base_server_names(pContainer p_cont) {
+
+			if (p_cont == nullptr)
+				return false;
+
+			BaseNames base = {};
+			p_cont->base_names(base);
+
+			for (BaseNames::iterator it = base.begin(); it != base.end(); ++it) {
+				int tt = TenBitsAtAddress(it->first.c_str());
+
+				if (base_server[tt] != nullptr) {
+					log_printf(log_error_level, "BaseAPI::start(): Base name conflict with \"%s\"", it->first.c_str());
+
+					return false;
+				}
+				base_server[tt] = it->second;
+			}
+
+			return true;
+		}
+
 		pChannels	p_channels;		///< The Channels container
 		pVolatile	p_volatile;		///< The Volatile container
 		pPersisted	p_persisted;	///< The Persisted container
