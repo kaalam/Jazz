@@ -102,7 +102,7 @@ class Core : public BaseAPI {
 		StatusCode start	();
 		StatusCode shut_down();
 
-		void base_names(BaseNames &base_names);
+		virtual void base_names(BaseNames &base_names);
 
 		// API Container interface: (see docstring)
 

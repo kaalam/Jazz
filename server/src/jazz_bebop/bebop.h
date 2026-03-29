@@ -100,7 +100,7 @@ class Bebop : public BaseAPI {
 		StatusCode start	();
 		StatusCode shut_down();
 
-		void base_names(BaseNames &base_names);
+		virtual void base_names(BaseNames &base_names);
 
 #ifndef CATCH_TEST
 	private:

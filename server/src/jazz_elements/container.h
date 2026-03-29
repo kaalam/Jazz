@@ -548,7 +548,7 @@ class Container : public Service {
 
 		// Support for container names in the BaseAPI .base_names()
 
-		void base_names(BaseNames &base_names);
+		virtual void base_names(BaseNames &base_names);
 
 #ifndef CATCH_TEST
 	protected:

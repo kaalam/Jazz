@@ -153,8 +153,8 @@ class Persisted : public Container {
 
 		// Support for container names in the BaseAPI .base_names()
 
-		void base_names(BaseNames &base_names);
-		bool dbi_exists(Name	   dbi_name);
+		virtual void base_names(BaseNames &base_names);
+		bool		 dbi_exists(Name	   dbi_name);
 
 		/**	\brief Check if the service is running.
 

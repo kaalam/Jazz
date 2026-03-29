@@ -287,7 +287,7 @@ class Channels : public Container {
 
 		// Support for container names in the BaseAPI .base_names()
 
-		void base_names(BaseNames &base_names);
+		virtual void base_names(BaseNames &base_names);
 
 		// Public config variables
 
